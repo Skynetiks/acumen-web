@@ -39,7 +39,7 @@ export default function LoginScreen() {
     handleSubmit,
     formState: { errors },
     setValue,
-    watch,
+    // watch,
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {

@@ -10,123 +10,148 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
-import { Route as AuthIndexImport } from './routes/auth/index'
-import { Route as AuthSignupIndexImport } from './routes/auth/signup/index'
-import { Route as AuthLoginIndexImport } from './routes/auth/login/index'
+import { Route as rootRoute } from "./routes/__root";
+import { Route as IndexImport } from "./routes/index";
+import { Route as OnboardingIndexImport } from "./routes/onboarding/index";
+import { Route as AuthIndexImport } from "./routes/auth/index";
+import { Route as AuthSignupIndexImport } from "./routes/auth/signup/index";
+import { Route as AuthLoginIndexImport } from "./routes/auth/login/index";
 
 // Create/Update Routes
 
 const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
+
+const OnboardingIndexRoute = OnboardingIndexImport.update({
+  id: "/onboarding/",
+  path: "/onboarding/",
+  getParentRoute: () => rootRoute,
+} as any);
 
 const AuthIndexRoute = AuthIndexImport.update({
-  id: '/auth/',
-  path: '/auth/',
+  id: "/auth/",
+  path: "/auth/",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const AuthSignupIndexRoute = AuthSignupIndexImport.update({
-  id: '/auth/signup/',
-  path: '/auth/signup/',
+  id: "/auth/signup/",
+  path: "/auth/signup/",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const AuthLoginIndexRoute = AuthLoginIndexImport.update({
-  id: '/auth/login/',
-  path: '/auth/login/',
+  id: "/auth/login/",
+  path: "/auth/login/",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 // Populate the FileRoutesByPath interface
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/auth/': {
-      id: '/auth/'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/auth/login/': {
-      id: '/auth/login/'
-      path: '/auth/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/auth/signup/': {
-      id: '/auth/signup/'
-      path: '/auth/signup'
-      fullPath: '/auth/signup'
-      preLoaderRoute: typeof AuthSignupIndexImport
-      parentRoute: typeof rootRoute
-    }
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/auth/": {
+      id: "/auth/";
+      path: "/auth";
+      fullPath: "/auth";
+      preLoaderRoute: typeof AuthIndexImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/onboarding/": {
+      id: "/onboarding/";
+      path: "/onboarding";
+      fullPath: "/onboarding";
+      preLoaderRoute: typeof OnboardingIndexImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/auth/login/": {
+      id: "/auth/login/";
+      path: "/auth/login";
+      fullPath: "/auth/login";
+      preLoaderRoute: typeof AuthLoginIndexImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/auth/signup/": {
+      id: "/auth/signup/";
+      path: "/auth/signup";
+      fullPath: "/auth/signup";
+      preLoaderRoute: typeof AuthSignupIndexImport;
+      parentRoute: typeof rootRoute;
+    };
   }
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/auth': typeof AuthIndexRoute
-  '/auth/login': typeof AuthLoginIndexRoute
-  '/auth/signup': typeof AuthSignupIndexRoute
+  "/": typeof IndexRoute;
+  "/auth": typeof AuthIndexRoute;
+  "/onboarding": typeof OnboardingIndexRoute;
+  "/auth/login": typeof AuthLoginIndexRoute;
+  "/auth/signup": typeof AuthSignupIndexRoute;
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/auth': typeof AuthIndexRoute
-  '/auth/login': typeof AuthLoginIndexRoute
-  '/auth/signup': typeof AuthSignupIndexRoute
+  "/": typeof IndexRoute;
+  "/auth": typeof AuthIndexRoute;
+  "/onboarding": typeof OnboardingIndexRoute;
+  "/auth/login": typeof AuthLoginIndexRoute;
+  "/auth/signup": typeof AuthSignupIndexRoute;
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/auth/': typeof AuthIndexRoute
-  '/auth/login/': typeof AuthLoginIndexRoute
-  '/auth/signup/': typeof AuthSignupIndexRoute
+  __root__: typeof rootRoute;
+  "/": typeof IndexRoute;
+  "/auth/": typeof AuthIndexRoute;
+  "/onboarding/": typeof OnboardingIndexRoute;
+  "/auth/login/": typeof AuthLoginIndexRoute;
+  "/auth/signup/": typeof AuthSignupIndexRoute;
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/auth/login' | '/auth/signup'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/auth/login' | '/auth/signup'
-  id: '__root__' | '/' | '/auth/' | '/auth/login/' | '/auth/signup/'
-  fileRoutesById: FileRoutesById
+  fileRoutesByFullPath: FileRoutesByFullPath;
+  fullPaths: "/" | "/auth" | "/onboarding" | "/auth/login" | "/auth/signup";
+  fileRoutesByTo: FileRoutesByTo;
+  to: "/" | "/auth" | "/onboarding" | "/auth/login" | "/auth/signup";
+  id:
+    | "__root__"
+    | "/"
+    | "/auth/"
+    | "/onboarding/"
+    | "/auth/login/"
+    | "/auth/signup/";
+  fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AuthIndexRoute: typeof AuthIndexRoute
-  AuthLoginIndexRoute: typeof AuthLoginIndexRoute
-  AuthSignupIndexRoute: typeof AuthSignupIndexRoute
+  IndexRoute: typeof IndexRoute;
+  AuthIndexRoute: typeof AuthIndexRoute;
+  OnboardingIndexRoute: typeof OnboardingIndexRoute;
+  AuthLoginIndexRoute: typeof AuthLoginIndexRoute;
+  AuthSignupIndexRoute: typeof AuthSignupIndexRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthIndexRoute: AuthIndexRoute,
+  OnboardingIndexRoute: OnboardingIndexRoute,
   AuthLoginIndexRoute: AuthLoginIndexRoute,
   AuthSignupIndexRoute: AuthSignupIndexRoute,
-}
+};
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
 /* ROUTE_MANIFEST_START
 {
@@ -136,6 +161,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/auth/",
+        "/onboarding/",
         "/auth/login/",
         "/auth/signup/"
       ]
@@ -145,6 +171,9 @@ export const routeTree = rootRoute
     },
     "/auth/": {
       "filePath": "auth/index.tsx"
+    },
+    "/onboarding/": {
+      "filePath": "onboarding/index.tsx"
     },
     "/auth/login/": {
       "filePath": "auth/login/index.tsx"
