@@ -10,148 +10,224 @@
 
 // Import Routes
 
-import { Route as rootRoute } from "./routes/__root";
-import { Route as IndexImport } from "./routes/index";
-import { Route as OnboardingIndexImport } from "./routes/onboarding/index";
-import { Route as AuthIndexImport } from "./routes/auth/index";
-import { Route as AuthSignupIndexImport } from "./routes/auth/signup/index";
-import { Route as AuthLoginIndexImport } from "./routes/auth/login/index";
+import { Route as rootRoute } from './routes/__root'
+import { Route as IndexImport } from './routes/index'
+import { Route as UniversitiesIndexImport } from './routes/universities/index'
+import { Route as OnboardingIndexImport } from './routes/onboarding/index'
+import { Route as CollegeFinderIndexImport } from './routes/college-finder/index'
+import { Route as AuthIndexImport } from './routes/auth/index'
+import { Route as UniversityUniversityIdImport } from './routes/university/$universityId'
+import { Route as AuthSignupIndexImport } from './routes/auth/signup/index'
+import { Route as AuthLoginIndexImport } from './routes/auth/login/index'
 
 // Create/Update Routes
 
 const IndexRoute = IndexImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
+
+const UniversitiesIndexRoute = UniversitiesIndexImport.update({
+  id: '/universities/',
+  path: '/universities/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const OnboardingIndexRoute = OnboardingIndexImport.update({
-  id: "/onboarding/",
-  path: "/onboarding/",
+  id: '/onboarding/',
+  path: '/onboarding/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
+
+const CollegeFinderIndexRoute = CollegeFinderIndexImport.update({
+  id: '/college-finder/',
+  path: '/college-finder/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthIndexRoute = AuthIndexImport.update({
-  id: "/auth/",
-  path: "/auth/",
+  id: '/auth/',
+  path: '/auth/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
+
+const UniversityUniversityIdRoute = UniversityUniversityIdImport.update({
+  id: '/university/$universityId',
+  path: '/university/$universityId',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthSignupIndexRoute = AuthSignupIndexImport.update({
-  id: "/auth/signup/",
-  path: "/auth/signup/",
+  id: '/auth/signup/',
+  path: '/auth/signup/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const AuthLoginIndexRoute = AuthLoginIndexImport.update({
-  id: "/auth/login/",
-  path: "/auth/login/",
+  id: '/auth/login/',
+  path: '/auth/login/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 // Populate the FileRoutesByPath interface
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/auth/": {
-      id: "/auth/";
-      path: "/auth";
-      fullPath: "/auth";
-      preLoaderRoute: typeof AuthIndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/onboarding/": {
-      id: "/onboarding/";
-      path: "/onboarding";
-      fullPath: "/onboarding";
-      preLoaderRoute: typeof OnboardingIndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/auth/login/": {
-      id: "/auth/login/";
-      path: "/auth/login";
-      fullPath: "/auth/login";
-      preLoaderRoute: typeof AuthLoginIndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/auth/signup/": {
-      id: "/auth/signup/";
-      path: "/auth/signup";
-      fullPath: "/auth/signup";
-      preLoaderRoute: typeof AuthSignupIndexImport;
-      parentRoute: typeof rootRoute;
-    };
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/university/$universityId': {
+      id: '/university/$universityId'
+      path: '/university/$universityId'
+      fullPath: '/university/$universityId'
+      preLoaderRoute: typeof UniversityUniversityIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/': {
+      id: '/auth/'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/college-finder/': {
+      id: '/college-finder/'
+      path: '/college-finder'
+      fullPath: '/college-finder'
+      preLoaderRoute: typeof CollegeFinderIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/onboarding/': {
+      id: '/onboarding/'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/universities/': {
+      id: '/universities/'
+      path: '/universities'
+      fullPath: '/universities'
+      preLoaderRoute: typeof UniversitiesIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/login/': {
+      id: '/auth/login/'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/signup/': {
+      id: '/auth/signup/'
+      path: '/auth/signup'
+      fullPath: '/auth/signup'
+      preLoaderRoute: typeof AuthSignupIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute;
-  "/auth": typeof AuthIndexRoute;
-  "/onboarding": typeof OnboardingIndexRoute;
-  "/auth/login": typeof AuthLoginIndexRoute;
-  "/auth/signup": typeof AuthSignupIndexRoute;
+  '/': typeof IndexRoute
+  '/university/$universityId': typeof UniversityUniversityIdRoute
+  '/auth': typeof AuthIndexRoute
+  '/college-finder': typeof CollegeFinderIndexRoute
+  '/onboarding': typeof OnboardingIndexRoute
+  '/universities': typeof UniversitiesIndexRoute
+  '/auth/login': typeof AuthLoginIndexRoute
+  '/auth/signup': typeof AuthSignupIndexRoute
 }
 
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute;
-  "/auth": typeof AuthIndexRoute;
-  "/onboarding": typeof OnboardingIndexRoute;
-  "/auth/login": typeof AuthLoginIndexRoute;
-  "/auth/signup": typeof AuthSignupIndexRoute;
+  '/': typeof IndexRoute
+  '/university/$universityId': typeof UniversityUniversityIdRoute
+  '/auth': typeof AuthIndexRoute
+  '/college-finder': typeof CollegeFinderIndexRoute
+  '/onboarding': typeof OnboardingIndexRoute
+  '/universities': typeof UniversitiesIndexRoute
+  '/auth/login': typeof AuthLoginIndexRoute
+  '/auth/signup': typeof AuthSignupIndexRoute
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute;
-  "/": typeof IndexRoute;
-  "/auth/": typeof AuthIndexRoute;
-  "/onboarding/": typeof OnboardingIndexRoute;
-  "/auth/login/": typeof AuthLoginIndexRoute;
-  "/auth/signup/": typeof AuthSignupIndexRoute;
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/university/$universityId': typeof UniversityUniversityIdRoute
+  '/auth/': typeof AuthIndexRoute
+  '/college-finder/': typeof CollegeFinderIndexRoute
+  '/onboarding/': typeof OnboardingIndexRoute
+  '/universities/': typeof UniversitiesIndexRoute
+  '/auth/login/': typeof AuthLoginIndexRoute
+  '/auth/signup/': typeof AuthSignupIndexRoute
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/auth" | "/onboarding" | "/auth/login" | "/auth/signup";
-  fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/auth" | "/onboarding" | "/auth/login" | "/auth/signup";
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/university/$universityId'
+    | '/auth'
+    | '/college-finder'
+    | '/onboarding'
+    | '/universities'
+    | '/auth/login'
+    | '/auth/signup'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/university/$universityId'
+    | '/auth'
+    | '/college-finder'
+    | '/onboarding'
+    | '/universities'
+    | '/auth/login'
+    | '/auth/signup'
   id:
-    | "__root__"
-    | "/"
-    | "/auth/"
-    | "/onboarding/"
-    | "/auth/login/"
-    | "/auth/signup/";
-  fileRoutesById: FileRoutesById;
+    | '__root__'
+    | '/'
+    | '/university/$universityId'
+    | '/auth/'
+    | '/college-finder/'
+    | '/onboarding/'
+    | '/universities/'
+    | '/auth/login/'
+    | '/auth/signup/'
+  fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  AuthIndexRoute: typeof AuthIndexRoute;
-  OnboardingIndexRoute: typeof OnboardingIndexRoute;
-  AuthLoginIndexRoute: typeof AuthLoginIndexRoute;
-  AuthSignupIndexRoute: typeof AuthSignupIndexRoute;
+  IndexRoute: typeof IndexRoute
+  UniversityUniversityIdRoute: typeof UniversityUniversityIdRoute
+  AuthIndexRoute: typeof AuthIndexRoute
+  CollegeFinderIndexRoute: typeof CollegeFinderIndexRoute
+  OnboardingIndexRoute: typeof OnboardingIndexRoute
+  UniversitiesIndexRoute: typeof UniversitiesIndexRoute
+  AuthLoginIndexRoute: typeof AuthLoginIndexRoute
+  AuthSignupIndexRoute: typeof AuthSignupIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  UniversityUniversityIdRoute: UniversityUniversityIdRoute,
   AuthIndexRoute: AuthIndexRoute,
+  CollegeFinderIndexRoute: CollegeFinderIndexRoute,
   OnboardingIndexRoute: OnboardingIndexRoute,
+  UniversitiesIndexRoute: UniversitiesIndexRoute,
   AuthLoginIndexRoute: AuthLoginIndexRoute,
   AuthSignupIndexRoute: AuthSignupIndexRoute,
-};
+}
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
 
 /* ROUTE_MANIFEST_START
 {
@@ -160,8 +236,11 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/university/$universityId",
         "/auth/",
+        "/college-finder/",
         "/onboarding/",
+        "/universities/",
         "/auth/login/",
         "/auth/signup/"
       ]
@@ -169,11 +248,20 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.tsx"
     },
+    "/university/$universityId": {
+      "filePath": "university/$universityId.tsx"
+    },
     "/auth/": {
       "filePath": "auth/index.tsx"
     },
+    "/college-finder/": {
+      "filePath": "college-finder/index.tsx"
+    },
     "/onboarding/": {
       "filePath": "onboarding/index.tsx"
+    },
+    "/universities/": {
+      "filePath": "universities/index.tsx"
     },
     "/auth/login/": {
       "filePath": "auth/login/index.tsx"
