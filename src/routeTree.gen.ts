@@ -16,9 +16,13 @@ import { Route as UniversitiesIndexImport } from './routes/universities/index'
 import { Route as OnboardingIndexImport } from './routes/onboarding/index'
 import { Route as CollegeFinderIndexImport } from './routes/college-finder/index'
 import { Route as AuthIndexImport } from './routes/auth/index'
+import { Route as ApplicationsIndexImport } from './routes/applications/index'
 import { Route as UniversityUniversityIdImport } from './routes/university/$universityId'
+import { Route as ApplicationsApplicationIdImport } from './routes/applications/$applicationId'
+import { Route as UniversityUniversitIdIndexImport } from './routes/university/$universitId/index'
 import { Route as AuthSignupIndexImport } from './routes/auth/signup/index'
 import { Route as AuthLoginIndexImport } from './routes/auth/login/index'
+import { Route as UniversityUniversitIdApplyIndexImport } from './routes/university/$universitId/apply/index'
 
 // Create/Update Routes
 
@@ -52,11 +56,31 @@ const AuthIndexRoute = AuthIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ApplicationsIndexRoute = ApplicationsIndexImport.update({
+  id: '/applications/',
+  path: '/applications/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const UniversityUniversityIdRoute = UniversityUniversityIdImport.update({
   id: '/university/$universityId',
   path: '/university/$universityId',
   getParentRoute: () => rootRoute,
 } as any)
+
+const ApplicationsApplicationIdRoute = ApplicationsApplicationIdImport.update({
+  id: '/applications/$applicationId',
+  path: '/applications/$applicationId',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const UniversityUniversitIdIndexRoute = UniversityUniversitIdIndexImport.update(
+  {
+    id: '/university/$universitId/',
+    path: '/university/$universitId/',
+    getParentRoute: () => rootRoute,
+  } as any,
+)
 
 const AuthSignupIndexRoute = AuthSignupIndexImport.update({
   id: '/auth/signup/',
@@ -70,6 +94,13 @@ const AuthLoginIndexRoute = AuthLoginIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const UniversityUniversitIdApplyIndexRoute =
+  UniversityUniversitIdApplyIndexImport.update({
+    id: '/university/$universitId/apply/',
+    path: '/university/$universitId/apply/',
+    getParentRoute: () => rootRoute,
+  } as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -81,11 +112,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/applications/$applicationId': {
+      id: '/applications/$applicationId'
+      path: '/applications/$applicationId'
+      fullPath: '/applications/$applicationId'
+      preLoaderRoute: typeof ApplicationsApplicationIdImport
+      parentRoute: typeof rootRoute
+    }
     '/university/$universityId': {
       id: '/university/$universityId'
       path: '/university/$universityId'
       fullPath: '/university/$universityId'
       preLoaderRoute: typeof UniversityUniversityIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/applications/': {
+      id: '/applications/'
+      path: '/applications'
+      fullPath: '/applications'
+      preLoaderRoute: typeof ApplicationsIndexImport
       parentRoute: typeof rootRoute
     }
     '/auth/': {
@@ -130,6 +175,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupIndexImport
       parentRoute: typeof rootRoute
     }
+    '/university/$universitId/': {
+      id: '/university/$universitId/'
+      path: '/university/$universitId'
+      fullPath: '/university/$universitId'
+      preLoaderRoute: typeof UniversityUniversitIdIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/university/$universitId/apply/': {
+      id: '/university/$universitId/apply/'
+      path: '/university/$universitId/apply'
+      fullPath: '/university/$universitId/apply'
+      preLoaderRoute: typeof UniversityUniversitIdApplyIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -137,92 +196,124 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/university/$universityId': typeof UniversityUniversityIdRoute
+  '/applications': typeof ApplicationsIndexRoute
   '/auth': typeof AuthIndexRoute
   '/college-finder': typeof CollegeFinderIndexRoute
   '/onboarding': typeof OnboardingIndexRoute
   '/universities': typeof UniversitiesIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/auth/signup': typeof AuthSignupIndexRoute
+  '/university/$universitId': typeof UniversityUniversitIdIndexRoute
+  '/university/$universitId/apply': typeof UniversityUniversitIdApplyIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/university/$universityId': typeof UniversityUniversityIdRoute
+  '/applications': typeof ApplicationsIndexRoute
   '/auth': typeof AuthIndexRoute
   '/college-finder': typeof CollegeFinderIndexRoute
   '/onboarding': typeof OnboardingIndexRoute
   '/universities': typeof UniversitiesIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/auth/signup': typeof AuthSignupIndexRoute
+  '/university/$universitId': typeof UniversityUniversitIdIndexRoute
+  '/university/$universitId/apply': typeof UniversityUniversitIdApplyIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/applications/$applicationId': typeof ApplicationsApplicationIdRoute
   '/university/$universityId': typeof UniversityUniversityIdRoute
+  '/applications/': typeof ApplicationsIndexRoute
   '/auth/': typeof AuthIndexRoute
   '/college-finder/': typeof CollegeFinderIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/universities/': typeof UniversitiesIndexRoute
   '/auth/login/': typeof AuthLoginIndexRoute
   '/auth/signup/': typeof AuthSignupIndexRoute
+  '/university/$universitId/': typeof UniversityUniversitIdIndexRoute
+  '/university/$universitId/apply/': typeof UniversityUniversitIdApplyIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/applications/$applicationId'
     | '/university/$universityId'
+    | '/applications'
     | '/auth'
     | '/college-finder'
     | '/onboarding'
     | '/universities'
     | '/auth/login'
     | '/auth/signup'
+    | '/university/$universitId'
+    | '/university/$universitId/apply'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/applications/$applicationId'
     | '/university/$universityId'
+    | '/applications'
     | '/auth'
     | '/college-finder'
     | '/onboarding'
     | '/universities'
     | '/auth/login'
     | '/auth/signup'
+    | '/university/$universitId'
+    | '/university/$universitId/apply'
   id:
     | '__root__'
     | '/'
+    | '/applications/$applicationId'
     | '/university/$universityId'
+    | '/applications/'
     | '/auth/'
     | '/college-finder/'
     | '/onboarding/'
     | '/universities/'
     | '/auth/login/'
     | '/auth/signup/'
+    | '/university/$universitId/'
+    | '/university/$universitId/apply/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApplicationsApplicationIdRoute: typeof ApplicationsApplicationIdRoute
   UniversityUniversityIdRoute: typeof UniversityUniversityIdRoute
+  ApplicationsIndexRoute: typeof ApplicationsIndexRoute
   AuthIndexRoute: typeof AuthIndexRoute
   CollegeFinderIndexRoute: typeof CollegeFinderIndexRoute
   OnboardingIndexRoute: typeof OnboardingIndexRoute
   UniversitiesIndexRoute: typeof UniversitiesIndexRoute
   AuthLoginIndexRoute: typeof AuthLoginIndexRoute
   AuthSignupIndexRoute: typeof AuthSignupIndexRoute
+  UniversityUniversitIdIndexRoute: typeof UniversityUniversitIdIndexRoute
+  UniversityUniversitIdApplyIndexRoute: typeof UniversityUniversitIdApplyIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApplicationsApplicationIdRoute: ApplicationsApplicationIdRoute,
   UniversityUniversityIdRoute: UniversityUniversityIdRoute,
+  ApplicationsIndexRoute: ApplicationsIndexRoute,
   AuthIndexRoute: AuthIndexRoute,
   CollegeFinderIndexRoute: CollegeFinderIndexRoute,
   OnboardingIndexRoute: OnboardingIndexRoute,
   UniversitiesIndexRoute: UniversitiesIndexRoute,
   AuthLoginIndexRoute: AuthLoginIndexRoute,
   AuthSignupIndexRoute: AuthSignupIndexRoute,
+  UniversityUniversitIdIndexRoute: UniversityUniversitIdIndexRoute,
+  UniversityUniversitIdApplyIndexRoute: UniversityUniversitIdApplyIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -236,20 +327,30 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/applications/$applicationId",
         "/university/$universityId",
+        "/applications/",
         "/auth/",
         "/college-finder/",
         "/onboarding/",
         "/universities/",
         "/auth/login/",
-        "/auth/signup/"
+        "/auth/signup/",
+        "/university/$universitId/",
+        "/university/$universitId/apply/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/applications/$applicationId": {
+      "filePath": "applications/$applicationId.tsx"
+    },
     "/university/$universityId": {
       "filePath": "university/$universityId.tsx"
+    },
+    "/applications/": {
+      "filePath": "applications/index.tsx"
     },
     "/auth/": {
       "filePath": "auth/index.tsx"
@@ -268,6 +369,12 @@ export const routeTree = rootRoute
     },
     "/auth/signup/": {
       "filePath": "auth/signup/index.tsx"
+    },
+    "/university/$universitId/": {
+      "filePath": "university/$universitId/index.tsx"
+    },
+    "/university/$universitId/apply/": {
+      "filePath": "university/$universitId/apply/index.tsx"
     }
   }
 }

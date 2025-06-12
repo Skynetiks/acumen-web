@@ -46,9 +46,14 @@ export const stayConnectedSchema = z.object({
     .min(1, "Please select how you heard about us"),
 });
 
+export const documentUploadSchema = z.object({
+  documents: z.array(z.string()).optional(),
+});
+
 export type PersonalDetailsData = z.infer<typeof personalDetailsSchema>;
 export type StudyPreferencesData = z.infer<typeof studyPreferencesSchema>;
 export type CoursePreferencesData = z.infer<typeof coursePreferencesSchema>;
 export type WhyJapanData = z.infer<typeof whyJapanSchema>;
 export type ContactPreferencesData = z.infer<typeof contactPreferencesSchema>;
 export type StayConnectedData = z.infer<typeof stayConnectedSchema>;
+export type DocumentUploadData = z.infer<typeof documentUploadSchema>;
