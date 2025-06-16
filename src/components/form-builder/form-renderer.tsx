@@ -4,6 +4,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FormHeader } from "./form-header";
 import { useForm } from "@/hooks/use-form";
 import type { FormConfig } from "@/types/form.types";
+import PageWrapper from "../page-wrapper";
+import { cn } from "@/lib/utils";
 
 interface FormRendererProps {
   config: FormConfig;
@@ -33,15 +35,13 @@ export function FormRenderer({
   if (isCompleted && config.successComponent) {
     const FormSuccess = config.successComponent;
     return (
-      <div
-        className={`min-h-screen bg-gray-50 flex items-center justify-center p-4 ${className}`}
-      >
-        <Card className={`w-full max-w-md shadow-lg`}>
+      <PageWrapper className="self-center">
+        <Card className={`w-full shadow-lg`}>
           <CardContent className="p-8">
             <FormSuccess />
           </CardContent>
         </Card>
-      </div>
+      </PageWrapper>
     );
   }
 
@@ -51,10 +51,8 @@ export function FormRenderer({
   const StepComponent = currentStepConfig.component;
 
   return (
-    <div
-      className={`min-h-screen flex items-center justify-center p-4 ${className}`}
-    >
-      <Card className={`w-full max-w-md shadow-lg `}>
+    <PageWrapper className="self-center">
+      <Card className={cn("w-full shadow-lg", className)}>
         <CardContent className="px-8">
           <div className="flex flex-col gap-12 justify-between">
             {config.showProgress !== false && (
@@ -89,6 +87,6 @@ export function FormRenderer({
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PageWrapper>
   );
 }

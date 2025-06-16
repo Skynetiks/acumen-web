@@ -19,7 +19,7 @@ export function ApplicationSuccessStep() {
 
       {/* Continue Button */}
       <Button asChild className="w-full">
-        <Link to="/applications">Continue</Link>
+        <Link to="/application">Continue</Link>
       </Button>
     </div>
   );

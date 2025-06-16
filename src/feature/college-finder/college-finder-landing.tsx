@@ -1,4 +1,5 @@
 import PageHeader from "@/components/page-header";
+import PageTitle from "@/components/page-title";
 import PageWrapper from "@/components/page-wrapper";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,7 +13,7 @@ export function CollegeFinderLanding() {
         <div className="bg-background">
           <div className="flex items-center justify-start p-4 gap-6">
             <Menu className="h-6 w-6 text-primary" />
-            <h1 className="text-lg font-semibold">Find Universities</h1>
+            <PageTitle title="Find Universities" />
             <div className="w-6" /> {/* Spacer */}
           </div>
         </div>
@@ -21,7 +22,7 @@ export function CollegeFinderLanding() {
       {/* Main Content */}
       <div className="p-6 space-y-8">
         {/* Thank You Message */}
-        <Card className="bg-white shadow-sm">
+        <Card className="bg-white border-none shadow-none">
           <CardContent className="p-6 text-center space-y-4">
             <h2 className="text-lg font-semibold text-gray-900">
               Thank you for sharing your information!
@@ -30,7 +31,7 @@ export function CollegeFinderLanding() {
               Want to get results faster? Complete your profile once and the
               College Finder auto-fills the steps forever!
             </p>
-            <Button variant="link" className="text-pink-500 font-medium p-0">
+            <Button variant="link" className=" font-medium p-0">
               Complete Profile
             </Button>
 
@@ -71,11 +72,8 @@ export function CollegeFinderLanding() {
         </div>
 
         {/* Get Started Button */}
-        <div className="pt-8">
-          <Button
-            asChild
-            className="w-full py-4 bg-pink-500 hover:bg-pink-600 text-white font-medium rounded-lg"
-          >
+        <div className="pt-8 w-full text-center">
+          <Button asChild className="max-w-max py-4">
             <Link to="/universities">Get Started</Link>
           </Button>
         </div>

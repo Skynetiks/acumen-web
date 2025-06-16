@@ -1,11 +1,8 @@
 import { FormRenderer } from "@/components/form-builder/form-renderer";
-import { onboardingConfig } from "./configs/form/onboarding.config";
+import { onboardingConfig } from "./configs/onboarding.config";
 
 function OnboardingForm() {
-  // Extract initial data from URL params or API
-  const initialData = {};
-
-  return <FormRenderer config={onboardingConfig} initialData={initialData} />;
+  return <FormRenderer config={onboardingConfig} />;
 }
 
 export default OnboardingForm;

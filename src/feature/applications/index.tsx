@@ -1,78 +1,46 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { usePagination } from "@/hooks/use-pagination";
 import { Link } from "@tanstack/react-router";
-import { Search, Filter, GraduationCap, ChevronRight } from "lucide-react";
+import { GraduationCap, ChevronRight } from "lucide-react";
+import { fetchApplications } from "./data/api";
+import type { Application, ParamsType } from "./data/schema";
+import { LoadMoreTrigger } from "@/components/load-more-button";
+import PageWrapper from "@/components/page-wrapper";
+import PageHeader from "@/components/page-header";
+import PageTitle from "@/components/page-title";
+import { ApplicationSearchAndFilter } from "./component/application-filter";
 
-interface Application {
-  id: string;
-  university: string;
-  program: string;
-  degree: string;
-  date: string;
-}
-
-const mockApplications: Application[] = [
-  {
-    id: "tokyo-eng",
-    university: "University of Tokyo",
-    program: "Engineering",
-    degree: "Masters",
-    date: "28 April 2025",
-  },
-  {
-    id: "kyoto-nat",
-    university: "Kyoto University",
-    program: "Natural Sciences",
-    degree: "PhD",
-    date: "30 May 2025",
-  },
-  {
-    id: "osaka-soc",
-    university: "Osaka University",
-    program: "Social Sciences",
-    degree: "Bachelors",
-    date: "30 May 2025",
-  },
-  {
-    id: "tokyo-med",
-    university: "Tokyo University",
-    program: "Medicine / Health Sciences",
-    degree: "PhD",
-    date: "20 April 2025",
-  },
-  {
-    id: "nagoya-hum",
-    university: "Nagoya University",
-    program: "Humanities",
-    degree: "Masters",
-    date: "28 May 2025",
-  },
-];
-
-export default function ApplicationsPage() {
+export default function ApplicationsPage({ params }: { params: ParamsType }) {
+  const { items, loadMoreRef, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    usePagination<ParamsType, Application>({
+      queryKey: ["applications"],
+      fetchFn: fetchApplications,
+      filters: {
+        search: params.search,
+        degree: params.degree,
+        program: params.program,
+        date: params.date,
+      },
+      //   pageSize: PAGE_SIZE,
+    });
   return (
-    <div className="min-h-screen bg-white p-4">
-      <h1 className="text-2xl font-semibold mb-4">My Applications</h1>
-
-      {/* Search and Filter */}
-      <div className="flex items-center space-x-3 mb-6">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-          <Input placeholder="Search University..." className="pl-10" />
+    <PageWrapper>
+      <PageHeader>
+        <div className="flex items-center justify-between p-4 gap-6">
+          <div className="flex-1 flex-col flex">
+            <div className="flex justify-between items-center gap-4">
+              <PageTitle title="My Applications" />
+            </div>
+          </div>
         </div>
-        <Button className="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-full flex items-center space-x-2">
-          <Filter className="h-4 w-4" />
-          <span>Filters</span>
-        </Button>
-      </div>
+      </PageHeader>
+
+      <ApplicationSearchAndFilter />
 
       {/* Applications List */}
-      <div className="space-y-3">
-        {mockApplications.map((application) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {items.map((application) => (
           <Link
-            to={"/applications/$applicationId"}
+            to={"/application/$applicationId"}
             params={{ applicationId: application.id }}
             key={application.id}
           >
@@ -82,7 +50,9 @@ export default function ApplicationsPage() {
                   <GraduationCap className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-medium">{application.university}</h3>
+                  <h3 className="font-medium text-primary">
+                    {application.name}
+                  </h3>
                   <p className="text-muted-foreground text-sm">
                     {application.program} ({application.degree})
                   </p>
@@ -97,7 +67,14 @@ export default function ApplicationsPage() {
             </div>
           </Link>
         ))}
+        <div ref={loadMoreRef} className="h-8" />
+        <LoadMoreTrigger
+          loadMoreRef={loadMoreRef}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          onClick={fetchNextPage}
+        />
       </div>
-    </div>
+    </PageWrapper>
   );
 }

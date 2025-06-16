@@ -12,58 +12,20 @@ import {
   Tag,
   MapPin,
 } from "lucide-react";
+import type { University } from "./data/schema";
+import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
 
-interface UniversityDetailProps {
-  universityId: string;
-}
-
-const universityData = {
-  utsunomiya: {
-    name: "Utsunomiya University",
-    banner: "/placeholder.svg?height=200&width=400",
-    logo: "/placeholder.svg?height=80&width=80",
-    details: {
-      prearrivalAdmission: "Yes",
-      degreeType: "Bachelor",
-      mediumOfInstructions: "English, Japanese",
-      universityType: "Public",
-      beginsAt: "July",
-      category: "Engineering",
-      subcategory: "Computer Science",
-    },
-  },
-  tokyo: {
-    name: "University Of Tokyo",
-    banner: "/placeholder.svg?height=200&width=400",
-    logo: "/placeholder.svg?height=80&width=80",
-    details: {
-      prearrivalAdmission: "Yes",
-      degreeType: "Master",
-      mediumOfInstructions: "English, Japanese",
-      universityType: "National",
-      beginsAt: "October",
-      category: "Humanities",
-      subcategory: "Literature",
-    },
-  },
-};
-
-export function UniversityDetail({ universityId }: UniversityDetailProps) {
-  const university =
-    universityData[universityId as keyof typeof universityData] ||
-    universityData.tokyo;
-
+export function UniversityDetail({ university }: { university: University }) {
   return (
     <PageWrapper>
       <PageHeader>
-        <div className="bg-white shadow-sm max-w-md">
-          <div className="flex items-center justify-between p-4">
-            <NavigateBackArrowProps to={"/universities"} />
-            <h1 className="text-lg font-semibold text-gray-900">
-              {university.name}
-            </h1>
-            <Menu className="h-6 w-6 text-gray-600" />
-          </div>
+        <div className="flex items-center justify-between p-4">
+          <NavigateBackArrowProps to={"/university"} />
+          <h1 className="text-lg font-semibold text-gray-900">
+            {university.name}
+          </h1>
+          <div />
         </div>
       </PageHeader>
 
@@ -88,6 +50,25 @@ export function UniversityDetail({ universityId }: UniversityDetailProps) {
           </div>
         </div>
       </div>
+      <Card className="bg-white shadow-sm">
+        <CardContent className="p-0 flex flex-col gap-4 justify-center items-center">
+          <div className="flex items-center space-x-3">
+            <Home className="h-5 w-5 text-primary" />
+            <span className="text-secondary-foreground">{university.name}</span>
+          </div>
+          <span className="text-primary font-medium">
+            {university.description}
+          </span>
+          <Button className="max-w-max py-3" asChild>
+            <Link
+              to="/university/$universityId/apply"
+              params={{ universityId: university.id }}
+            >
+              Apply Now
+            </Link>
+          </Button>
+        </CardContent>
+      </Card>
 
       {/* Content */}
       <div className="pt-12 p-4">
@@ -112,7 +93,7 @@ export function UniversityDetail({ universityId }: UniversityDetailProps) {
                   </span>
                 </div>
                 <span className="text-primary font-medium">
-                  {university.details.prearrivalAdmission}
+                  {university.prearrivalAdmission}
                 </span>
               </div>
 
@@ -125,7 +106,7 @@ export function UniversityDetail({ universityId }: UniversityDetailProps) {
                   </span>
                 </div>
                 <span className="text-primary font-medium">
-                  {university.details.degreeType}
+                  {university.degreeType}
                 </span>
               </div>
 
@@ -138,7 +119,7 @@ export function UniversityDetail({ universityId }: UniversityDetailProps) {
                   </span>
                 </div>
                 <span className="text-primary font-medium">
-                  {university.details.mediumOfInstructions}
+                  {university.mediumOfInstructions}
                 </span>
               </div>
 
@@ -151,7 +132,7 @@ export function UniversityDetail({ universityId }: UniversityDetailProps) {
                   </span>
                 </div>
                 <span className="text-primary font-medium">
-                  {university.details.universityType}
+                  {university.universityType}
                 </span>
               </div>
 
@@ -162,7 +143,7 @@ export function UniversityDetail({ universityId }: UniversityDetailProps) {
                   <span className="text-secondary-foreground">Begins at:</span>
                 </div>
                 <span className="text-primary font-medium">
-                  {university.details.beginsAt}
+                  {university.beginsAt}
                 </span>
               </div>
 
@@ -173,7 +154,7 @@ export function UniversityDetail({ universityId }: UniversityDetailProps) {
                   <span className="text-secondary-foreground">Category:</span>
                 </div>
                 <span className="text-primary font-medium">
-                  {university.details.category}
+                  {university.category}
                 </span>
               </div>
 
@@ -186,7 +167,7 @@ export function UniversityDetail({ universityId }: UniversityDetailProps) {
                   </span>
                 </div>
                 <span className="text-primary font-medium">
-                  {university.details.subcategory}
+                  {university.subcategory}
                 </span>
               </div>
             </div>

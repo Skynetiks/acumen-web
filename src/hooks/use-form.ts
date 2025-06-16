@@ -3,6 +3,7 @@
 import { useEffect, useMemo } from "react";
 import type { FormConfig } from "@/types/form.types";
 import { createFormStore } from "@/lib/form-store.factory";
+import { queryClient } from "@/lib/queryClient";
 
 // Custom hook for form management
 export function useForm(config: FormConfig, initialData?: Record<string, any>) {
@@ -16,6 +17,18 @@ export function useForm(config: FormConfig, initialData?: Record<string, any>) {
       store.populateForm(initialData);
     }
   }, []); // Empty dependency array to run only once
+
+  useEffect(() => {
+    if (!config) return;
+
+    const nextStep = config.steps[store.currentStep];
+    if (nextStep?.prefetchData && nextStep.id && nextStep.queryFn) {
+      queryClient.prefetchQuery({
+        queryKey: [`${nextStep.id}-form-options`],
+        queryFn: nextStep.queryFn,
+      });
+    }
+  }, [store.currentStep, config]);
 
   // Get current step configuration
   const currentStepConfig = useMemo(() => {

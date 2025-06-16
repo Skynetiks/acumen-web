@@ -112,8 +112,12 @@ function createFormActions(
       setLoading(true);
 
       try {
-        await config.onComplete?.(formData);
-        set({ isCompleted: true, currentStep: config.steps.length + 1 });
+        const result = config.validationSchema.safeParse(formData);
+        if (result.error) throw new Error("Validation failed");
+        else {
+          await config.onComplete?.(formData);
+          set({ isCompleted: true, currentStep: 1 });
+        }
       } catch (error) {
         console.error("Form submission error:", error);
         throw error;

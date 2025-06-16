@@ -8,12 +8,7 @@ type PageProps = {
 
 function Page({ children, className }: PageProps) {
   return (
-    <div
-      className={cn(
-        "min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4",
-        className
-      )}
-    >
+    <div className={cn("min-h-screen bg-gray-50 grid py-4", className)}>
       {children}
     </div>
   );

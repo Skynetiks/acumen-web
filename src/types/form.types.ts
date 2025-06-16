@@ -13,6 +13,9 @@ export interface FormStepConfig<T = any> {
   buttonText?: string;
   onSubmit?: (data: T) => Promise<void> | void;
   onSkip?: () => Promise<void> | void;
+
+  prefetchData?: boolean; // should we prefetch this step’s data?
+  queryFn?: () => Promise<T>; // fetcher function for this step’s data
 }
 
 // Props passed to each form step component
@@ -34,6 +37,7 @@ export interface FormConfig {
   successComponent?: React.ComponentType<any>;
   steps: FormStepConfig[];
   initialData?: Record<string, any>;
+  validationSchema: z.ZodSchema<any>;
   onComplete?: (data: Record<string, any>) => Promise<void>;
   onStepChange?: (currentStep: number, totalSteps: number) => void;
   persistData?: boolean;
