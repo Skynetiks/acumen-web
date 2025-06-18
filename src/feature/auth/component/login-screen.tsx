@@ -1,16 +1,5 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,44 +7,55 @@ import { z } from "zod";
 import { useState } from "react";
 import Logo from "@/components/logo";
 import { Loader2 } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { countries } from "./countries";
+import { useAuth } from "@/lib/providers/auth-context";
 
 const loginSchema = z.object({
-  countryCode: z.string().min(1, "Country code is required"),
-  mobile: z
+  countryCode: z.string().min(1, "Country is required"),
+  phone: z
     .string()
-    .min(10, "Mobile number must be at least 10 digits")
-    .regex(/^\d+$/, "Mobile number must contain only digits"),
+    .min(6, "Phone number is too short")
+    .max(15, "Phone number is too long"),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginScreen() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [loginMethod, setLoginMethod] = useState<"mobile" | "email">("mobile");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    // watch,
-  } = useForm<LoginFormData>({
+  const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      countryCode: "in",
-      mobile: "",
+      countryCode: "IN-+91",
+      phone: "",
     },
+    mode: "onChange",
   });
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      console.log("Login data:", data);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      // Handle successful login here
-      alert("OTP sent successfully!");
+      console.log(data);
+      login("Test User");
+      navigate({ to: "/onboarding" });
     } catch (error) {
       console.error("Login error:", error);
       alert("Failed to send OTP. Please try again.");
@@ -79,7 +79,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <Card className="w-full max-w-sm shadow-lg">
+    <Card className="justify-self-center justify-center w-full rounded-lg max-w-md border-none shadow-none">
       <div className="p-6 pb-0">
         <Logo />
       </div>
@@ -92,67 +92,90 @@ export default function LoginScreen() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Mobile Number Section */}
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="mobile" className="text-primary font-medium">
-                Mobile Number
-              </Label>
-              <div className="flex">
-                <Select
-                  defaultValue="in"
-                  onValueChange={(value) => setValue("countryCode", value)}
-                >
-                  <SelectTrigger className="w-24 text-xs rounded-r-none border-r-0">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="in">IN +91</SelectItem>
-                    <SelectItem value="us">US +1</SelectItem>
-                    <SelectItem value="uk">UK +44</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Input
-                  {...register("mobile")}
-                  id="mobile"
-                  placeholder="Enter number"
-                  className="flex-1 rounded-l-none"
-                  disabled={isLoading}
-                />
-              </div>
-              {errors.mobile && (
-                <p className="text-red-500 text-xs">{errors.mobile.message}</p>
-              )}
-            </div>
-
-            <button
-              type="button"
-              onClick={() =>
-                setLoginMethod(loginMethod === "mobile" ? "email" : "mobile")
-              }
-              className="text-primary text-sm hover:underline"
-              disabled={isLoading}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <p
+              className="text-primary text-sm font-medium"
+              aria-label="Enter mobile number"
             >
-              Login with {loginMethod === "mobile" ? "Email" : "Mobile"}
-            </button>
-          </div>
+              Mobile Number
+            </p>
+            <div className="flex gap-2 items-start justify-start">
+              <FormField
+                control={form.control}
+                name="countryCode"
+                render={({ field }) => (
+                  <FormItem className="shrink-0">
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select country" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {countries.map((country) => (
+                            <SelectItem
+                              key={country.name}
+                              value={country.code + "-" + country.dialCode}
+                            >
+                              {country.code} {country.dialCode}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          {/* Request OTP Button */}
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Sending OTP...
-              </>
-            ) : (
-              "Request OTP"
-            )}
-          </Button>
-        </form>
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="tel"
+                        className="w-full"
+                        placeholder="Enter phone number"
+                        disabled={isLoading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <Link
+              to="/auth/login-email"
+              className="text-primary text-sm font-medium hover:underline"
+            >
+              Login with Email
+            </Link>
+
+            <Button
+              type="submit"
+              className="w-full mt-4"
+              disabled={isLoading || !form.formState.isValid}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Sending OTP...
+                </>
+              ) : (
+                "Request OTP"
+              )}
+            </Button>
+          </form>
+        </Form>
 
         <div className="text-center">
-          <Link to="/" className="text-primary text-sm hover:underline">
+          <Link to="/auth" className="text-primary text-sm hover:underline">
             Forgot Password?
           </Link>
         </div>

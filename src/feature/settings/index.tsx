@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  ArrowLeft,
-  Edit,
-  Users,
-  Shield,
-  Bell,
-  Moon,
-  FileText,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Edit, Users, Shield, Bell, Moon, FileText } from "lucide-react";
 import NavigateBackArrow from "@/components/navigate-back-arrow";
 import PageWrapper from "@/components/page-wrapper";
 import PageHeader from "@/components/page-header";
@@ -27,8 +18,8 @@ const settingsItems = [
 export default function Settings() {
   return (
     <PageWrapper>
-      <PageHeader>
-        <div className="flex items-center gap-4 px-6 py-6 mb-8">
+      <PageHeader className="px-6">
+        <div className="flex items-center gap-4 py-6 mb-8">
           <NavigateBackArrow to="/dashboard" />
           <span className="text-lg font-medium">Home</span>
         </div>
@@ -36,11 +27,11 @@ export default function Settings() {
       </PageHeader>
 
       {/* Profile Section */}
-      <div className="px-6 mb-12">
+      <div className="px-6 mb-12 ">
         <div className="flex items-center gap-4">
           <div className="w-20 h-20 rounded-full overflow-hidden">
             <img
-              src="/placeholder.svg?height=80&width=80"
+              src="/assets/dashboard/profile.png"
               alt="Rohit Sharma"
               width={80}
               height={80}
@@ -56,11 +47,11 @@ export default function Settings() {
         {settingsItems.map((item, index) => (
           <div key={index} className="flex items-center gap-4 cursor-pointer">
             <div
-              className={`w-12 h-12 ${item.color} rounded-full flex items-center justify-center`}
+              className={`w-12 h-12 bg-primary rounded-full flex items-center justify-center`}
             >
-              <item.icon className="w-6 h-6 text-white" />
+              <item.icon className="w-5 h-5 text-white" />
             </div>
-            <span className="text-lg font-medium">{item.label}</span>
+            <span className="text-md font-medium">{item.label}</span>
           </div>
         ))}
       </div>

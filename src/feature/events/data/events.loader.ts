@@ -16,6 +16,5 @@ export async function eventsLoader() {
     console.warn("Fetch failed, using mock data fallback", error);
     queryClient.setQueryData(key, mockEvents.slice(0, 10));
   }
-  console.log(queryClient.getQueriesData({ queryKey: key }));
   return null;
 }

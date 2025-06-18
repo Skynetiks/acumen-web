@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Logo from "@/components/logo";
-
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 const signupSchema = z
   .object({
     firstName: z
@@ -31,8 +31,8 @@ const signupSchema = z
       .string()
       .min(8, "Password must be at least 8 characters")
       .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+        passwordRegex,
+        "Password must include uppercase, lowercase, number, and special character"
       ),
     confirmPassword: z.string(),
     agreeToTerms: z
@@ -94,7 +94,7 @@ export default function SignupScreen() {
   };
 
   return (
-    <Card className="w-full max-w-sm shadow-lg">
+    <Card className="justify-self-center justify-center w-full rounded-lg max-w-sm border-none shadow-none">
       <div className="p-6 pb-0">
         <Logo />
       </div>

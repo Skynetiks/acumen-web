@@ -1,35 +1,97 @@
-import { Calendar, MapPin, ChevronRight, ListFilter } from "lucide-react";
-import { Button } from "@/components/ui/button";
+"use client";
+
+import { useEffect } from "react";
 import {
   Drawer,
   DrawerTrigger,
   DrawerContent,
   DrawerHeader,
 } from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
+import { MapPin, ChevronRight, ListFilter } from "lucide-react";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Slider } from "@/components/ui/slider";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { eventFilters, type EventFiltersType } from "../data/schema";
+import {
+  useQueryState,
+  parseAsString,
+  parseAsInteger,
+  parseAsStringEnum,
+} from "nuqs";
 
-export default function EventFilter() {
+import {
+  eventFilters,
+  type EventFiltersType,
+  type EventTypeType,
+} from "../data/schema";
+
+import { DatePicker } from "@/components/ui/date-picker";
+import { cn } from "@/lib/utils";
+
+export default function EventFilterDrawer() {
+  const [timeDate, setTimeDate] = useQueryState(
+    "timeDate",
+    parseAsString.withDefault("tomorrow")
+  );
+  const [eventType, setEventType] = useQueryState<EventTypeType>(
+    "eventType",
+    parseAsStringEnum(["online", "offline"]).withDefault("offline")
+  );
+  const [location, setLocation] = useQueryState(
+    "location",
+    parseAsString.withDefault("New Delhi")
+  );
+  const [priceMin, setPriceMin] = useQueryState(
+    "priceMin",
+    parseAsInteger.withDefault(10)
+  );
+  const [priceMax, setPriceMax] = useQueryState(
+    "priceMax",
+    parseAsInteger.withDefault(200)
+  );
+
   const form = useForm<EventFiltersType>({
     resolver: zodResolver(eventFilters),
     defaultValues: {
-      timeDate: "tomorrow",
-      eventType: "offline",
-      location: "New Delhi",
-      priceRange: { min: 10, max: 200 },
+      timeDate,
+      eventType,
+      location,
+      priceRange: { min: priceMin, max: priceMax },
     },
   });
 
+  useEffect(() => {
+    form.reset({
+      timeDate,
+      eventType,
+      location,
+      priceRange: { min: priceMin, max: priceMax },
+    });
+  }, [timeDate, eventType, location, priceMin, priceMax, form]);
+
   const onSubmit = (data: EventFiltersType) => {
-    console.log(data);
+    setTimeDate(data.timeDate || "");
+    setEventType(data.eventType || "offline");
+    setLocation(data.location || "");
+    setPriceMin(data.priceRange.min);
+    setPriceMax(data.priceRange.max);
   };
 
   const handleReset = () => {
+    setTimeDate("tomorrow");
+    setEventType("offline");
+    setLocation("New Delhi");
+    setPriceMin(10);
+    setPriceMax(200);
     form.reset();
   };
+
+  const selectedValue = form.watch("timeDate");
+  const isDateSelected =
+    selectedValue &&
+    !["today", "tomorrow", "this-week"].includes(selectedValue);
+  const parsedDate = isDateSelected ? new Date(selectedValue) : undefined;
 
   return (
     <Drawer>
@@ -42,19 +104,18 @@ export default function EventFilter() {
         </Button>
       </DrawerTrigger>
 
-      <DrawerContent className="h-[90vh] rounded-t-3xl border-0 p-0">
-        {/* Handle */}
-        <div className="flex justify-center py-3">
-          <div className="w-12 h-1 bg-gray-300 rounded-full" />
-        </div>
-
+      <DrawerContent className="!max-h-[90vh] rounded-t-3xl border-0 p-0">
         <div className="px-6 pb-6 overflow-y-auto">
           <DrawerHeader className="mb-8">
             <h2 className="text-xl font-semibold text-left">Filter</h2>
           </DrawerHeader>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-8"
+              noValidate
+            >
               {/* Time & Date */}
               <div>
                 <h3 className="font-semibold mb-4 text-[17px]">Time & Date</h3>
@@ -64,38 +125,46 @@ export default function EventFilter() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <div className="flex gap-3 mb-5">
-                          {["today", "tomorrow", "this-week"].map((value) => (
-                            <Button
-                              key={value}
-                              type="button"
-                              variant={
-                                field.value === value ? "default" : "outline"
-                              }
-                              className={`rounded-full px-6 h-10 text-[15px] font-medium ${
-                                field.value === value
-                                  ? "bg-primary hover:bg-primary/90 text-white"
-                                  : "border-gray-200 text-gray-600 hover:bg-gray-50"
-                              }`}
-                              onClick={() => field.onChange(value)}
-                            >
-                              {value
-                                .replace("-", " ")
-                                .replace(/\b\w/g, (l) => l.toUpperCase())}
-                            </Button>
-                          ))}
-                        </div>
+                        <>
+                          <div className="flex gap-3 mb-5">
+                            {["today", "tomorrow", "this-week"].map((value) => (
+                              <Button
+                                key={value}
+                                type="button"
+                                variant="default"
+                                className={`rounded-full px-6 font-medium border ${
+                                  field.value === value
+                                    ? "bg-primary text-white"
+                                    : "bg-transparent border-gray-200 text-gray-600 hover:text-white"
+                                }`}
+                                onClick={() => field.onChange(value)}
+                              >
+                                {value
+                                  .replace("-", " ")
+                                  .replace(/\b\w/g, (l) => l.toUpperCase())}
+                              </Button>
+                            ))}
+                          </div>
+                          <div className="max-w-max">
+                            <DatePicker
+                              value={parsedDate}
+                              triggerText="Choose from Calendar"
+                              triggerClassName={cn(
+                                "border-none text-primary font-medium",
+                                parsedDate
+                                  ? "bg-primary text-white"
+                                  : "bg-[unset]"
+                              )}
+                              onChange={(date) => {
+                                if (date) field.onChange(date.toISOString());
+                              }}
+                            />
+                          </div>
+                        </>
                       </FormControl>
                     </FormItem>
                   )}
                 />
-                <div className="flex items-center gap-3 text-primary cursor-pointer">
-                  <Calendar className="w-5 h-5" />
-                  <span className="text-[15px] font-medium">
-                    Choose from calendar
-                  </span>
-                  <ChevronRight className="w-4 h-4 ml-auto" />
-                </div>
               </div>
 
               {/* Event Type */}
@@ -112,13 +181,11 @@ export default function EventFilter() {
                             <Button
                               key={value}
                               type="button"
-                              variant={
-                                field.value === value ? "default" : "outline"
-                              }
-                              className={`rounded-full px-8 h-10 text-[15px] font-medium ${
+                              variant="default"
+                              className={`rounded-full px-8 font-medium border ${
                                 field.value === value
-                                  ? "bg-primary hover:bg-primary/90 text-white"
-                                  : "border-gray-200 text-gray-600 hover:bg-gray-50"
+                                  ? "bg-primary text-white"
+                                  : "bg-transparent border-gray-200 text-gray-600 hover:text-white"
                               }`}
                               onClick={() => field.onChange(value)}
                             >
@@ -135,12 +202,14 @@ export default function EventFilter() {
               {/* Location */}
               <div>
                 <h3 className="font-semibold mb-4 text-[17px]">Location</h3>
-                <div className="flex items-center gap-4 p-4 bg-primary/5 rounded-2xl cursor-pointer">
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-primary" />
+                <div className="max-w-max flex items-center gap-4 p-4 rounded-2xl cursor-pointer select-none">
+                  <div className="h-12 w-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                    <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                      <MapPin className="w-5 h-5 text-primary" />
+                    </div>
                   </div>
                   <span className="flex-1 font-medium text-[17px]">
-                    New Delhi
+                    {location}
                   </span>
                   <ChevronRight className="w-5 h-5 text-gray-400" />
                 </div>
@@ -157,7 +226,6 @@ export default function EventFilter() {
                     {form.watch("priceRange.max")}
                   </span>
                 </div>
-
                 <FormField
                   control={form.control}
                   name="priceRange"
@@ -183,21 +251,26 @@ export default function EventFilter() {
               </div>
 
               {/* Actions */}
-              <div className="flex gap-4 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="flex-1 rounded-full h-12 border-gray-200 text-gray-600 font-semibold text-[15px] hover:bg-gray-50"
-                  onClick={handleReset}
-                >
-                  RESET
-                </Button>
-                <Button
-                  type="submit"
-                  className="flex-1 rounded-full h-12 bg-primary hover:bg-primary/90 text-white font-semibold text-[15px]"
-                >
-                  APPLY
-                </Button>
+              <div className="flex gap-4 pt-4 md:justify-end">
+                <div className="flex-1 flex items-center justify-center">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="rounded-full h-12 w-full md:w-1/2 border-gray-300 text-gray-600 font-semibold"
+                    onClick={handleReset}
+                  >
+                    RESET
+                  </Button>
+                </div>
+                <div className="flex-1 flex items-center justify-center">
+                  <Button
+                    type="submit"
+                    variant="default"
+                    className="rounded-full w-full md:w-1/2 h-12"
+                  >
+                    APPLY
+                  </Button>
+                </div>
               </div>
             </form>
           </Form>

@@ -7,7 +7,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   personalDetailsSchema,
   type PersonalDetailsData,
@@ -16,6 +15,7 @@ import type { FormStepProps } from "@/types/form.types";
 import { BaseFormStep } from "../base-form-step";
 import { fetchPersonalDetails } from "./data/api";
 import { ControlledSelect } from "../../ui/controlled-select";
+import { DatePicker } from "@/components/ui/date-picker";
 
 export function PersonalDetailsStep(props: FormStepProps<PersonalDetailsData>) {
   const { data, config } = props;
@@ -23,13 +23,19 @@ export function PersonalDetailsStep(props: FormStepProps<PersonalDetailsData>) {
     queryKey: [`${config.id}-form-options`],
     queryFn: fetchPersonalDetails,
   });
-
+  console.log(data);
   const form = useForm<PersonalDetailsData>({
     resolver: zodResolver(personalDetailsSchema),
-    defaultValues: data,
+    defaultValues: {
+      ...data,
+      dateOfBirth:
+        "dateOfBirth" in data && data.dateOfBirth
+          ? new Date(data.dateOfBirth)
+          : undefined,
+    },
     mode: "onChange",
   });
-
+  console.log(data);
   return (
     <BaseFormStep {...props} form={form}>
       <div className="grid gap-4">
@@ -40,14 +46,17 @@ export function PersonalDetailsStep(props: FormStepProps<PersonalDetailsData>) {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input
-                  type="date"
-                  className="w-full"
-                  value={field.value ?? ""}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  name={field.name}
-                  ref={field.ref}
+                <DatePicker
+                  value={field.value}
+                  onChange={(e: Date | undefined) => {
+                    console.log(e instanceof Date);
+                    field.onChange(e);
+                  }}
+                  hideFuture={true}
+                  triggerText="Select birth date"
+                  triggerClassName={
+                    field.value ? "text-foreground" : "text-muted-foreground"
+                  }
                 />
               </FormControl>
               <FormMessage />

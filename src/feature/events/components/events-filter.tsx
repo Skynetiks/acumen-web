@@ -1,35 +1,14 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useQueryState, parseAsString } from "nuqs";
 import { Input } from "@/components/ui/input";
-import { ListFilter, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
+import EventFilterDrawer from "./event-filter-modal";
 
 export function EventSearchAndFilter() {
-  const searchParams = useSearch({ from: "/events/" });
-  const navigate = useNavigate();
-
-  const [searchQuery, setSearchQuery] = useState(searchParams.search ?? "");
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      navigate({
-        to: "/events",
-        search: { ...searchParams, search: searchQuery },
-      });
-    }, 300);
-
-    return () => clearTimeout(timeout);
-  }, [searchQuery]);
-
-  const handleFilter = (newFilters: Record<string, string | undefined>) => {
-    navigate({
-      to: "/events",
-      search: {
-        ...searchParams,
-        ...newFilters,
-      },
-    });
-  };
+  // sync `search` query param as string, default empty string
+  const [searchQuery, setSearchQuery] = useQueryState(
+    "search",
+    parseAsString.withDefault("")
+  );
 
   return (
     <div className="px-4 pb-2">
@@ -43,13 +22,8 @@ export function EventSearchAndFilter() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Button className="p-2 rounded-full flex items-center">
-          <span className="p-1 bg-white rounded-full">
-            <ListFilter className="h-4 w-4 text-primary" strokeWidth={3} />
-          </span>
-          <span>Filters&nbsp;</span>
-        </Button>
-        {/* <EventSearchAndFilter /> */}
+        {/* Pass current URL state or setter down for filters */}
+        <EventFilterDrawer />
       </div>
     </div>
   );

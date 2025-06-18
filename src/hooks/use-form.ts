@@ -57,7 +57,7 @@ export function useForm(config: FormConfig, initialData?: Record<string, any>) {
 
       // Validate data
       const validatedData = currentStepConfig.schema.parse(data);
-
+      console.log(validatedData);
       // Update store
       store.updateFormData(currentStepConfig.id, validatedData);
 

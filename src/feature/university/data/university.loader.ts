@@ -20,7 +20,6 @@ export async function universitiesLoader() {
     console.warn("Fetch failed, using mock data fallback", error);
     queryClient.setQueryData(key, mockUniversities.slice(0, 10));
   }
-  console.log(queryClient.getQueriesData({ queryKey: key }));
   return null;
 }
 
@@ -35,6 +34,5 @@ export async function universityByIdLoader(universityId: string) {
     console.warn("Fetch failed, using mock data fallback", error);
     queryClient.setQueryData(key, mockUniversities[0]);
   }
-  console.log(queryClient.getQueriesData({ queryKey: key }));
   return null;
 }

@@ -1,5 +1,3 @@
-"use client";
-
 import { Search, FileText, Calendar, Bell, Building2 } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,8 +6,9 @@ import type { DashboardDataType } from "./data/schema";
 import { Link } from "@tanstack/react-router";
 import PageTitle from "@/components/page-title";
 import PageHeader from "@/components/page-header";
-import AppSidebar from "@/components/sidebar";
 import BookingPopup from "../booking/booking-popup";
+import { cn } from "@/lib/utils";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 interface DashboardProps {
   data: DashboardDataType;
@@ -22,14 +21,16 @@ export default function Dashboard({ data }: DashboardProps) {
       <PageHeader>
         <div className="flex items-center justify-between p-6 pb-4">
           <div className="flex items-center gap-4">
-            <AppSidebar />
+            <header className="block md:hidden">
+              <SidebarTrigger className="lg:hidden text-primary" />
+            </header>
             <PageTitle title="Welcome, Ankur !" />
           </div>
           <Link
             to="/notification"
-            className={buttonVariants({ variant: "ghost" })}
+            className={cn(buttonVariants({ variant: "ghost" }), "text-primary")}
           >
-            <Bell className="w-6 h-6 text-primary" />
+            <Bell className="w-6 h-6" />
           </Link>
         </div>
       </PageHeader>
@@ -38,23 +39,23 @@ export default function Dashboard({ data }: DashboardProps) {
       <div className="px-6 mb-6">
         <div className="grid grid-cols-3 gap-3 mb-6">
           <Card className="bg-primary text-white border-0">
-            <CardContent className="p-4 text-center">
-              <Search className="w-6 h-6 mx-auto mb-2" />
-              <p className="text-sm font-medium">Search</p>
+            <CardContent className="p-0 text-center">
+              <Search className="w-5 h-5 mx-auto mb-1" />
+              <p className="text-xs">Search</p>
               <p className="text-xs">Universities</p>
             </CardContent>
           </Card>
           <Card className="bg-primary text-white border-0">
-            <CardContent className="p-4 text-center">
-              <FileText className="w-6 h-6 mx-auto mb-2" />
-              <p className="text-sm font-medium">My</p>
+            <CardContent className="p-0 text-center">
+              <FileText className="w-5 h-5 mx-auto mb-1" />
+              <p className="text-xs">My</p>
               <p className="text-xs">Applications</p>
             </CardContent>
           </Card>
           <Card className="bg-primary text-white border-0">
-            <CardContent className="p-4 text-center">
-              <Calendar className="w-6 h-6 mx-auto mb-2" />
-              <p className="text-sm font-medium">Upcoming</p>
+            <CardContent className="p-0 text-center">
+              <Calendar className="w-5 h-5 mx-auto mb-1" />
+              <p className="text-xs">Upcoming</p>
               <p className="text-xs">events</p>
             </CardContent>
           </Card>
@@ -70,36 +71,31 @@ export default function Dashboard({ data }: DashboardProps) {
       <div className="px-6 mb-8">
         <h2 className="text-lg font-semibold mb-4">Universities</h2>
         <div className="grid grid-cols-2 gap-4">
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <Building2 className="w-5 h-5 text-primary" />
-                <span className="text-sm font-medium">University of Tokyo</span>
-              </div>
-              <Button
-                size="sm"
-                className="bg-primary hover:bg-primary/90 text-white rounded-full px-6"
-              >
-                Apply
-              </Button>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <Building2 className="w-5 h-5 text-primary" />
-                <span className="text-sm font-medium">
-                  Aichi Bunkyo University
-                </span>
-              </div>
-              <Button
-                size="sm"
-                className="bg-primary hover:bg-primary/90 text-white rounded-full px-6"
-              >
-                Apply
-              </Button>
-            </CardContent>
-          </Card>
+          {data.applications.map((university, i) => {
+            return (
+              <Card key={i}>
+                <CardContent className="p-4 flex flex-col gap-4 justify-between items-center">
+                  <div className="flex items-start gap-2 mb-3">
+                    <Building2 className="w-5 h-5 text-primary" />
+                    <span className="text-sm font-medium">
+                      {university.name}
+                    </span>
+                  </div>
+                  <Button
+                    size="sm"
+                    className="bg-primary hover:bg-primary/90 text-white rounded-full px-6"
+                  >
+                    <Link
+                      to="/university/$universityId"
+                      params={{ universityId: university.id }}
+                    >
+                      Apply
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </div>
 
@@ -107,34 +103,32 @@ export default function Dashboard({ data }: DashboardProps) {
       <div className="px-6 mb-8">
         <h2 className="text-lg font-semibold mb-4">My Applications</h2>
         <div className="grid grid-cols-2 gap-4">
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <Building2 className="w-5 h-5 text-primary" />
-                <span className="text-sm font-medium">Osaka University</span>
-              </div>
-              <Button
-                size="sm"
-                className="bg-primary hover:bg-primary/90 text-white rounded-full px-4"
-              >
-                Complete
-              </Button>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <Building2 className="w-5 h-5 text-primary" />
-                <span className="text-sm font-medium">Nagoya University</span>
-              </div>
-              <Button
-                size="sm"
-                className="bg-primary hover:bg-primary/90 text-white rounded-full px-4"
-              >
-                Incomplete
-              </Button>
-            </CardContent>
-          </Card>
+          {data.applications.map((application, i) => {
+            return (
+              <Card key={i}>
+                <CardContent className="p-4  flex flex-col gap-4 justify-between items-center">
+                  <div className="flex items-start gap-2 mb-3">
+                    <Building2 className="w-5 h-5 text-primary" />
+                    <span className="text-sm font-medium">
+                      {application.name}
+                    </span>
+                  </div>
+                  <Button
+                    size="sm"
+                    className="bg-primary hover:bg-primary/90 text-white rounded-full px-4"
+                    asChild
+                  >
+                    <Link
+                      to="/application/$applicationId"
+                      params={{ applicationId: application.id }}
+                    >
+                      {i % 2 !== 0 ? "incomplete" : "Complete"}
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </div>
 
@@ -142,19 +136,17 @@ export default function Dashboard({ data }: DashboardProps) {
       <div className="px-6 pb-6">
         <h2 className="text-lg font-semibold mb-4">Events</h2>
         <div className="grid grid-cols-2 gap-4">
-          <Card className="bg-orange-100">
-            <CardContent className="p-4">
-              <div className="text-center mb-3">
-                <div className="text-2xl font-bold text-primary">28</div>
-                <div className="text-xs text-gray-600">APRIL</div>
+          <Card className="border-none shadow-none">
+            <CardContent className=" relative p-0">
+              <div className="absolute left-2 top-1 text-center p-1 bg-white/80 rounded-2xl px-2">
+                <div className="text-md font-bold text-primary">28</div>
+                <div className="text-[10px] text-primary">APRIL</div>
               </div>
               <div className="mb-2">
                 <img
-                  src="/placeholder.svg?height=40&width=60"
+                  src="/assets/dashboard/event1.png"
                   alt="Event illustration"
-                  width={60}
-                  height={40}
-                  className="mx-auto"
+                  className="w-full h-full object-cover"
                 />
               </div>
               <p className="text-xs font-medium mb-1">
@@ -163,11 +155,15 @@ export default function Dashboard({ data }: DashboardProps) {
               <p className="text-xs text-primary">Wed, Apr 28, 5:30PM</p>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-4">
+          <Card className="border-none shadow-none">
+            <CardContent className="relative p-0">
+              <div className="absolute left-2 top-1 text-center p-1 bg-white/80 rounded-2xl px-2">
+                <div className="text-md font-bold text-primary">28</div>
+                <div className="text-[10px] text-primary">APRIL</div>
+              </div>
               <div className="mb-3">
                 <img
-                  src="/placeholder.svg?height=60&width=80"
+                  src="/assets/dashboard/event2.png"
                   alt="Library books"
                   width={80}
                   height={60}

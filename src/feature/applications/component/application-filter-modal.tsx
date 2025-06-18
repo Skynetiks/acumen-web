@@ -1,6 +1,4 @@
-"use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,28 +18,53 @@ import {
 import { ListFilter } from "lucide-react";
 
 interface UniversityFilterModalProps {
-  onFilter: (filters: any) => void;
+  onFilter: (filters: {
+    courseName: string;
+    universityType: string;
+    beginAt: string;
+  }) => void;
+  filters: {
+    courseName: string;
+    universityType: string;
+    beginAt: string;
+  };
 }
 
 export function ApplicationFilterModal({
   onFilter,
+  filters,
 }: UniversityFilterModalProps) {
-  const [degree, setDegree] = useState("All");
-  const [program, setProgram] = useState("All");
-  const [date, setDate] = useState("September 2025");
+  const [courseName, setCourseName] = useState(filters.courseName || "");
+  const [universityType, setUniversityType] = useState(
+    filters.universityType || ""
+  );
+  const [beginAt, setBeginAt] = useState(filters.beginAt || "September 2025");
+
+  // Keep local state synced with props
+  useEffect(() => {
+    setCourseName(filters.courseName);
+    setUniversityType(filters.universityType);
+    setBeginAt(filters.beginAt);
+  }, [filters]);
 
   const handleFilter = () => {
     onFilter({
-      degree: degree === "All" ? "" : degree,
-      program: program === "All" ? "" : program,
-      date: date,
+      courseName: courseName.trim(),
+      universityType: universityType.trim(),
+      beginAt: beginAt.trim(),
     });
   };
 
   const handleReset = () => {
-    setDegree("All");
-    setProgram("All");
-    setDate("September 2025");
+    setCourseName("");
+    setUniversityType("");
+    setBeginAt("September 2025");
+
+    onFilter({
+      courseName: "",
+      universityType: "",
+      beginAt: "September 2025",
+    });
   };
 
   return (
@@ -57,19 +80,17 @@ export function ApplicationFilterModal({
       <DialogContent className="sm:max-w-md mx-4">
         <DialogHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <DialogTitle className="text-lg font-semibold">
-            Filter Applications
+            Filter Universities
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
           {/* Course Name */}
           <div className="space-y-2">
-            <label className="text-sm font-medium ">
-              Enter university name
-            </label>
+            <label className="text-sm font-medium">Enter Course Name</label>
             <Input
-              value={degree}
-              onChange={(e) => setDegree(e.target.value)}
+              value={courseName}
+              onChange={(e) => setCourseName(e.target.value)}
               placeholder="All"
               className="w-full"
             />
@@ -77,8 +98,11 @@ export function ApplicationFilterModal({
 
           {/* University Type */}
           <div className="space-y-2">
-            <label className="text-sm font-medium ">University Type</label>
-            <Select value={program} onValueChange={setProgram}>
+            <label className="text-sm font-medium">University Type</label>
+            <Select
+              value={universityType || "All"}
+              onValueChange={(v) => setUniversityType(v === "All" ? "" : v)}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
@@ -93,10 +117,10 @@ export function ApplicationFilterModal({
 
           {/* Begin At */}
           <div className="space-y-2">
-            <label className="text-sm font-medium ">Begin at</label>
+            <label className="text-sm font-medium">Begin at</label>
             <Input
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
+              value={beginAt}
+              onChange={(e) => setBeginAt(e.target.value)}
               placeholder="September 2025"
               className="w-full"
             />

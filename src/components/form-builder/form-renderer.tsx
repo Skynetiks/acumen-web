@@ -35,9 +35,14 @@ export function FormRenderer({
   if (isCompleted && config.successComponent) {
     const FormSuccess = config.successComponent;
     return (
-      <PageWrapper className="self-center">
-        <Card className={`w-full shadow-lg`}>
-          <CardContent className="p-8">
+      <PageWrapper className="self-center justify-self-center">
+        <Card
+          className={cn(
+            "w-full h-full border-none md:border shadow-none",
+            className
+          )}
+        >
+          <CardContent className="p-8 h-full w-full">
             <FormSuccess />
           </CardContent>
         </Card>
@@ -51,39 +56,47 @@ export function FormRenderer({
   const StepComponent = currentStepConfig.component;
 
   return (
-    <PageWrapper className="self-center">
-      <Card className={cn("w-full shadow-lg", className)}>
-        <CardContent className="px-8">
-          <div className="flex flex-col gap-12 justify-between">
-            {config.showProgress !== false && (
-              <FormHeader
-                title={currentStepConfig.title}
-                subtitle={currentStepConfig.subtitle}
-                currentStep={formContext.currentStep}
-                totalSteps={formContext.totalSteps}
+    <PageWrapper className="self-center justify-self-center">
+      <Card
+        className={cn(
+          "w-full h-screen shadow-none md:shadow-lg border-none md:border",
+          className
+        )}
+      >
+        <CardContent className="px-8 h-full">
+          <div className="h-full flex flex-col gap-4 justify-between">
+            <div className="shrink-0">
+              {config.showProgress !== false && (
+                <FormHeader
+                  title={currentStepConfig.title}
+                  subtitle={currentStepConfig.subtitle}
+                  currentStep={formContext.currentStep}
+                  totalSteps={formContext.totalSteps}
+                  onBack={prevStep}
+                  showBackButton={
+                    currentStepConfig.showBackButton !== false &&
+                    formContext.currentStep > 1
+                  }
+                  progress={progress}
+                />
+              )}
+            </div>
+            <div className="flex-1">
+              <StepComponent
+                data={currentStepData}
+                errors={currentStepErrors}
+                isLoading={isLoading}
+                onSubmit={handleStepSubmit}
                 onBack={prevStep}
-                showBackButton={
-                  currentStepConfig.showBackButton !== false &&
-                  formContext.currentStep > 1
+                onSkip={
+                  currentStepConfig.isOptional || config.allowSkip
+                    ? handleStepSkip
+                    : undefined
                 }
-                progress={progress}
+                config={currentStepConfig}
+                formContext={formContext}
               />
-            )}
-
-            <StepComponent
-              data={currentStepData}
-              errors={currentStepErrors}
-              isLoading={isLoading}
-              onSubmit={handleStepSubmit}
-              onBack={prevStep}
-              onSkip={
-                currentStepConfig.isOptional || config.allowSkip
-                  ? handleStepSkip
-                  : undefined
-              }
-              config={currentStepConfig}
-              formContext={formContext}
-            />
+            </div>
           </div>
         </CardContent>
       </Card>

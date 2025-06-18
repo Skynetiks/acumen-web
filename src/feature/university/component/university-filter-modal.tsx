@@ -1,6 +1,4 @@
-"use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,30 +16,56 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ListFilter } from "lucide-react";
+import { MonthYearPicker } from "@/components/ui/month-year-picker";
 
 interface UniversityFilterModalProps {
-  onFilter: (filters: any) => void;
+  onFilter: (filters: {
+    courseName: string;
+    universityType: string;
+    beginAt: string;
+  }) => void;
+  filters: {
+    courseName: string;
+    universityType: string;
+    beginAt: string;
+  };
 }
 
 export function UniversityFilterModal({
   onFilter,
+  filters,
 }: UniversityFilterModalProps) {
-  const [courseName, setCourseName] = useState("All");
-  const [universityType, setUniversityType] = useState("All");
-  const [beginAt, setBeginAt] = useState("September 2025");
+  const [courseName, setCourseName] = useState(filters.courseName || "");
+  const [universityType, setUniversityType] = useState(
+    filters.universityType || ""
+  );
+  const [beginAt, setBeginAt] = useState(filters.beginAt || "September 2025");
+
+  // Keep local state synced with props
+  useEffect(() => {
+    setCourseName(filters.courseName);
+    setUniversityType(filters.universityType);
+    setBeginAt(filters.beginAt);
+  }, [filters]);
 
   const handleFilter = () => {
     onFilter({
-      courseName: courseName === "All" ? "" : courseName,
-      universityType: universityType === "All" ? "" : universityType,
-      beginAt: beginAt,
+      courseName: courseName.trim(),
+      universityType: universityType.trim(),
+      beginAt: beginAt.trim(),
     });
   };
 
   const handleReset = () => {
-    setCourseName("All");
-    setUniversityType("All");
+    setCourseName("");
+    setUniversityType("");
     setBeginAt("September 2025");
+
+    onFilter({
+      courseName: "",
+      universityType: "",
+      beginAt: "September 2025",
+    });
   };
 
   return (
@@ -64,7 +88,7 @@ export function UniversityFilterModal({
         <div className="space-y-6">
           {/* Course Name */}
           <div className="space-y-2">
-            <label className="text-sm font-medium ">Enter Course Name</label>
+            <label className="text-sm font-medium">Enter Course Name</label>
             <Input
               value={courseName}
               onChange={(e) => setCourseName(e.target.value)}
@@ -75,8 +99,11 @@ export function UniversityFilterModal({
 
           {/* University Type */}
           <div className="space-y-2">
-            <label className="text-sm font-medium ">University Type</label>
-            <Select value={universityType} onValueChange={setUniversityType}>
+            <label className="text-sm font-medium">University Type</label>
+            <Select
+              value={universityType || "All"}
+              onValueChange={(v) => setUniversityType(v === "All" ? "" : v)}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
@@ -91,12 +118,10 @@ export function UniversityFilterModal({
 
           {/* Begin At */}
           <div className="space-y-2">
-            <label className="text-sm font-medium ">Begin at</label>
-            <Input
+            <label className="text-sm font-medium">Begins At</label>
+            <MonthYearPicker
               value={beginAt}
-              onChange={(e) => setBeginAt(e.target.value)}
-              placeholder="September 2025"
-              className="w-full"
+              onChange={(val) => setBeginAt(val)}
             />
           </div>
 

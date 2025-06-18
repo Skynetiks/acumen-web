@@ -1,40 +1,37 @@
-// components/UniversitySearchAndFilter.tsx
-"use client";
-
-import { useEffect, useState } from "react";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useQueryState, parseAsString } from "nuqs";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { UniversityFilterModal } from "./university-filter-modal";
+import { useEffect, useState } from "react";
 
 export function UniversitySearchAndFilter() {
-  const searchParams = useSearch({ from: "/university/" });
-  const navigate = useNavigate();
+  // Each call returns [value, setValue] synced with URL query param
+  const [search, setSearch] = useQueryState(
+    "search",
+    parseAsString.withDefault("")
+  );
+  const [courseName, setCourseName] = useQueryState(
+    "courseName",
+    parseAsString.withDefault("")
+  );
+  const [universityType, setUniversityType] = useQueryState(
+    "universityType",
+    parseAsString.withDefault("")
+  );
+  const [beginAt, setBeginAt] = useQueryState(
+    "beginAt",
+    parseAsString.withDefault("September 2025")
+  );
 
-  const [searchQuery, setSearchQuery] = useState(searchParams.search || "");
+  // Local state to debounce the input
+  const [searchInput, setSearchInput] = useState(search);
 
-  // Update search param in URL on debounce
   useEffect(() => {
     const timeout = setTimeout(() => {
-      navigate({
-        to: "/university",
-        search: { search: searchQuery },
-      });
-    }, 300); // debounce
-
+      setSearch(searchInput.trim());
+    }, 300);
     return () => clearTimeout(timeout);
-  }, [searchQuery]);
-
-  // handleFilter will receive a filters object (like { country: 'uk', stream: 'cs' })
-  const handleFilter = (newFilters: Record<string, string | undefined>) => {
-    navigate({
-      to: "/university",
-      search: {
-        ...searchParams,
-        ...newFilters,
-      },
-    });
-  };
+  }, [searchInput, setSearch]);
 
   return (
     <div className="p-4 bg-background">
@@ -46,12 +43,19 @@ export function UniversitySearchAndFilter() {
           />
           <Input
             placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             className="pl-10 border-none"
           />
         </div>
-        <UniversityFilterModal onFilter={handleFilter} />
+        <UniversityFilterModal
+          onFilter={({ courseName, universityType, beginAt }) => {
+            setCourseName(courseName);
+            setUniversityType(universityType);
+            setBeginAt(beginAt);
+          }}
+          filters={{ courseName, universityType, beginAt }}
+        />
       </div>
     </div>
   );

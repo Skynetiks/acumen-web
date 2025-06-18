@@ -24,7 +24,6 @@ export function StudyPreferencesStep(
   props: FormStepProps<StudyPreferencesData>
 ) {
   const { data, isLoading, config } = props;
-  console.log(config.id);
   const { data: studyPreferences } = useSuspenseQuery({
     queryKey: [`${config.id}-form-options`],
     queryFn: fetchStudyPreferencesData,
@@ -66,11 +65,10 @@ export function StudyPreferencesStep(
                         key={year.value}
                         pressed={isSelected ?? false}
                         onPressedChange={(pressed) => {
-                          const current = field.value || [];
                           if (pressed) {
-                            field.onChange([...current, value]);
-                          } else {
-                            field.onChange(current.filter((v) => v !== value));
+                            field.onChange(value);
+                          } else if (value === field.value) {
+                            field.onChange("");
                           }
                         }}
                         className={`w-full text-xs flex flex-col gap-0 justify-between items-center`}
@@ -108,13 +106,10 @@ export function StudyPreferencesStep(
                         key={intake.value}
                         pressed={isSelected ?? false}
                         onPressedChange={(pressed) => {
-                          const current = field.value || [];
                           if (pressed) {
-                            field.onChange([...current, intake.value]);
-                          } else {
-                            field.onChange(
-                              current.filter((v) => v !== intake.value)
-                            );
+                            field.onChange(intake.value);
+                          } else if (intake.value === field.value) {
+                            field.onChange("");
                           }
                         }}
                         className={`w-full flex flex-col gap-0 items-start justify-center text-xs

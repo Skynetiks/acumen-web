@@ -1,13 +1,40 @@
 import type { Event, EventParamsType } from "./schema";
-
+const images = ["/assets/events.png", "/assets/events2.png"];
 export const mockEvents: Event[] = Array.from({ length: 50 }, (_, i) => ({
   id: i + 1,
   title: `Event Title ${i + 1}`,
   date: "2025-06-20",
   time: "5:30 PM",
   location: "Bangalore",
-  image: "/placeholder.svg?height=80&width=80",
+  image: images[i % 2],
 }));
+
+import { addDays, startOfWeek, endOfWeek } from "date-fns";
+
+export function parseTimeDateFilter(value: string): {
+  start: Date;
+  end?: Date;
+} {
+  const today = new Date();
+
+  switch (value) {
+    case "today":
+      return { start: today };
+    case "tomorrow":
+      return { start: addDays(today, 1) };
+    case "this-week":
+      return {
+        start: startOfWeek(today, { weekStartsOn: 1 }),
+        end: endOfWeek(today, { weekStartsOn: 1 }),
+      };
+    default:
+      try {
+        return { start: new Date(value) };
+      } catch {
+        return { start: today };
+      }
+  }
+}
 
 export async function fetchEvents({
   pageParam = 1,
@@ -45,6 +72,25 @@ export async function fetchEvents({
         .toLowerCase()
         .includes(filters.location?.toLowerCase() || "")
     );
+  }
+
+  const dateFilterParsed =
+    filters &&
+    "timeDate" in filters &&
+    filters.timeDate &&
+    parseTimeDateFilter(filters.timeDate || "");
+
+  if (
+    dateFilterParsed &&
+    "start" in dateFilterParsed &&
+    dateFilterParsed.start &&
+    dateFilterParsed.start instanceof Date
+  ) {
+    const { start, end } = dateFilterParsed;
+    filtered = filtered.filter((event) => {
+      const eventDate = new Date(event.date);
+      return eventDate >= start && (!end || eventDate <= end);
+    });
   }
 
   const start = (pageParam - 1) * pageSize;

@@ -1,20 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import logo from "../logo.svg";
+import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute("/")({
-  component: App,
-});
+export const Route = createFileRoute('/')({
+  component: RouteComponent,
+})
 
-function App() {
-  return (
-    <div className="text-center">
-      <header className="min-h-screen flex flex-col items-center justify-center text-white">
-        <img
-          src={logo}
-          className="h-[40vmin] pointer-events-none animate-[spin_20s_linear_infinite]"
-          alt="logo"
-        />
-      </header>
-    </div>
-  );
+function RouteComponent() {
+  return <div>Hello "/"!</div>
 }

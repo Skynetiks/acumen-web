@@ -11,10 +11,10 @@ export function EventsPage({ params }: { params: EventParamsType }) {
     <PageWrapper>
       <PageHeader>
         <div className="flex items-center justify-between p-4 gap-6">
-          <NavigateBackArrow to="/college-finder" className="self-start mt-1" />
+          <NavigateBackArrow to="/dashboard" className="self-start mt-1" />
           <div className="flex-1 flex-col flex">
             <div className="flex justify-between items-center gap-4">
-              <PageTitle title="University Finder" />
+              <PageTitle title="Events" />
             </div>
           </div>
         </div>

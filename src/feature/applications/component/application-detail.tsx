@@ -3,7 +3,6 @@ import PageHeader from "@/components/page-header";
 import PageWrapper from "@/components/page-wrapper";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  Menu,
   Home,
   GraduationCap,
   Globe,

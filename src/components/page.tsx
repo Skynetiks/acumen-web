@@ -7,11 +7,7 @@ type PageProps = {
 };
 
 function Page({ children, className }: PageProps) {
-  return (
-    <div className={cn("min-h-screen bg-gray-50 grid py-4", className)}>
-      {children}
-    </div>
-  );
+  return <div className={cn("min-h-screen grid", className)}>{children}</div>;
 }
 
 export default Page;

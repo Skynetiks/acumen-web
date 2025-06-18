@@ -32,13 +32,15 @@ export const eventFilters = z.object({
   }),
 });
 
+export const EventTypeEnum = z.enum(["online", "offline"]);
+export type EventTypeType = z.infer<typeof EventTypeEnum>;
 export const eventParams = z.object({
   search: z.string().optional(),
   timeDate: z.string().optional(),
-  eventType: z.enum(["online", "offline"]).optional(),
+  eventType: EventTypeEnum.optional(),
   location: z.string().optional(),
-  priceMin: z.coerce.number().default(10),
-  priceMax: z.coerce.number().default(200),
+  priceMin: z.coerce.number().optional(),
+  priceMax: z.coerce.number().optional(),
 });
 
 export type EventParamsType = z.infer<typeof eventParams>;

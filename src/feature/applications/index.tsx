@@ -8,6 +8,7 @@ import PageWrapper from "@/components/page-wrapper";
 import PageHeader from "@/components/page-header";
 import PageTitle from "@/components/page-title";
 import { ApplicationSearchAndFilter } from "./component/application-filter";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function ApplicationsPage({ params }: { params: ParamsType }) {
   const { items, loadMoreRef, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -28,7 +29,11 @@ export default function ApplicationsPage({ params }: { params: ParamsType }) {
         <div className="flex items-center justify-between p-4 gap-6">
           <div className="flex-1 flex-col flex">
             <div className="flex justify-between items-center gap-4">
+              <header className="block md:hidden">
+                <SidebarTrigger className="lg:hidden text-primary" />
+              </header>
               <PageTitle title="My Applications" />
+              <div />
             </div>
           </div>
         </div>
@@ -37,7 +42,7 @@ export default function ApplicationsPage({ params }: { params: ParamsType }) {
       <ApplicationSearchAndFilter />
 
       {/* Applications List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-8">
         {items.map((application) => (
           <Link
             to={"/application/$applicationId"}

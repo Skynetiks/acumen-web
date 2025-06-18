@@ -6,7 +6,7 @@ import { Link } from "@tanstack/react-router";
 
 export function ApplicationSuccessStep() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[400px] space-y-8 text-center px-4">
+    <div className="flex flex-col items-center justify-center h-full gap-10 text-center w-full">
       {/* Success Icon */}
       <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
         <Check className="w-8 h-8 text-white" />
@@ -18,7 +18,7 @@ export function ApplicationSuccessStep() {
       </p>
 
       {/* Continue Button */}
-      <Button asChild className="w-full">
+      <Button asChild className="w-max">
         <Link to="/application">Continue</Link>
       </Button>
     </div>

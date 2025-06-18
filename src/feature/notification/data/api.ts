@@ -52,7 +52,6 @@ export const mockNotifications = [
 export async function fetchNotifications({
   pageParam = 1,
   pageSize = 10,
-  filters = {},
 }: {
   pageParam?: number;
   pageSize?: number;

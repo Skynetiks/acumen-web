@@ -23,7 +23,7 @@ export function EventsList({ params }: { params: EventParamsType }) {
     });
 
   return (
-    <div className="p-4 grid grid-cols-1 gap-4 md:grid-cols-2 ">
+    <div className="p-8 grid grid-cols-1 gap-8 md:grid-cols-2 ">
       {items.map((event) => (
         <div key={event.id} className="flex items-start gap-4 cursor-pointer">
           <div className="w-20 h-20 rounded-2xl overflow-hidden">

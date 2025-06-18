@@ -17,7 +17,7 @@ export const universityApplicationSchema = z.object({
   whyJapan: whyJapanSchema,
   contactPreferences: contactPreferencesSchema,
   stayConnected: stayConnectedSchema,
-  documentUpload: documentUploadSchema,
+  documentUpload: documentUploadSchema.optional(),
 });
 
 export type UniversityApplicationType = z.infer<

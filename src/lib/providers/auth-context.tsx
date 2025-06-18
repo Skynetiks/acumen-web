@@ -1,39 +1,59 @@
-// src/auth/AuthContext.tsx
-import { createContext, useContext, useState } from "react";
+import { Navigate } from "@tanstack/react-router";
+import * as React from "react";
 
-type User = { id: string; name: string };
-type AuthContextType = {
-  user: User | null;
-  token: string | null;
-  login: (token: string, user: User) => void;
-  logout: () => void;
-};
+export interface AuthContext {
+  isAuthenticated: boolean;
+  login: (username: string) => Promise<void>;
+  logout: () => Promise<void>;
+  user: string | null;
+}
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = React.createContext<AuthContext | null>(null);
+
+const key = "tanstack.auth.user";
+
+function getStoredUser() {
+  return localStorage.getItem(key);
+}
+
+function setStoredUser(user: string | null) {
+  if (user) {
+    localStorage.setItem(key, user);
+  } else {
+    localStorage.removeItem(key);
+  }
+}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = React.useState<string | null>(getStoredUser());
+  const isAuthenticated = !!user;
 
-  const login = (newToken: string, newUser: User) => {
-    setToken(newToken);
-    setUser(newUser);
-  };
-
-  const logout = () => {
-    setToken(null);
+  const logout = React.useCallback(async () => {
+    setStoredUser(null);
     setUser(null);
-  };
+    Navigate({ to: "/auth/login" });
+  }, []);
+
+  const login = React.useCallback(async (username: string) => {
+    setStoredUser(username);
+    setUser(username);
+  }, []);
+
+  React.useEffect(() => {
+    setUser(getStoredUser());
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
 export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
-  return ctx;
+  const context = React.useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 }

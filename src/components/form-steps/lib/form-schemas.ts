@@ -1,7 +1,14 @@
 import { z } from "zod";
 
 export const personalDetailsSchema = z.object({
-  dateOfBirth: z.string().min(1, "Date of birth is required"),
+  dateOfBirth: z
+    .date({
+      required_error: "Date of birth is required",
+      invalid_type_error: "Invalid date format",
+    })
+    .max(new Date(), {
+      message: "Date of birth cannot be in the future",
+    }),
   nationality: z.string().min(1, "Nationality is required"),
   gender: z.string().min(1, "Gender is required"),
   familyBackground: z.string().min(1, "Family background is required"),
@@ -14,10 +21,10 @@ export const studyPreferencesSchema = z.object({
     .string()
     .min(1, "Preferred level of study is required"),
   preferredYearOfAdmission: z
-    .array(z.string())
+    .string()
     .min(1, "Preferred year of admission is required"),
   preferredIntake: z
-    .array(z.string())
+    .string()
     .min(1, "At least one intake preference is required"),
 });
 
@@ -47,15 +54,17 @@ export const stayConnectedSchema = z.object({
 });
 
 export const documentUploadSchema = z.object({
-  documents: z.array(
-    z.object({
-      id: z.string(),
-      name: z.string(),
-      format: z.string(),
-      size: z.string(),
-      status: z.string(),
-    })
-  ),
+  documents: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        format: z.string(),
+        size: z.string(),
+        status: z.string(),
+      })
+    )
+    .optional(),
 });
 
 export type PersonalDetailsData = z.infer<typeof personalDetailsSchema>;

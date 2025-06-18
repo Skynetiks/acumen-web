@@ -113,7 +113,8 @@ function createFormActions(
 
       try {
         const result = config.validationSchema.safeParse(formData);
-        if (result.error) throw new Error("Validation failed");
+        if (result.error)
+          throw new Error("Validation failed: -" + result.error);
         else {
           await config.onComplete?.(formData);
           set({ isCompleted: true, currentStep: 1 });

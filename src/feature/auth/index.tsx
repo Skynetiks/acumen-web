@@ -5,7 +5,7 @@ import { Link } from "@tanstack/react-router";
 
 export default function AuthScreen() {
   return (
-    <Card className="w-full rounded-lg max-w-sm shadow-lg">
+    <Card className="justify-self-center justify-center w-full rounded-lg max-w-sm border-none shadow-none">
       <CardContent className="p-8 space-y-8">
         {/* Logo Section */}
         <div className="text-center space-y-6 flex flex-col items-center">

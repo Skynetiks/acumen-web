@@ -27,12 +27,15 @@ export function BaseFormStep<T extends FieldValues>({
   showSkipButton = false,
 }: BaseFormStepProps<T>) {
   return (
-    <div className="space-y-6">
+    <div className="h-full">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {children}
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="h-full flex flex-col justify-between gap-4"
+        >
+          <div>{children}</div>
 
-          <div className="space-y-3 flex justify-end items-center gap-4">
+          <div className=" space-y-3 flex justify-end items-center gap-4">
             <Button
               type="submit"
               className={`w-full md:w-max py-3`}

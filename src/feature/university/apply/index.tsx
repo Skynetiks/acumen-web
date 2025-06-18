@@ -6,13 +6,14 @@ import getUserData from "./data/api";
 
 export default function ApplyPage() {
   const { universityId } = useParams({
-    from: "/university/$universityId/apply/",
+    from: "/_authenticated/_app/university/$universityId/apply/",
   });
   const { data: userData } = useSuspenseQuery({
-    queryKey: ["user"],
+    queryKey: ["userData"],
     queryFn: getUserData,
   });
 
   const formConfig = getUniversityApplicationConfig(universityId);
-  return <FormRenderer config={formConfig} initialData={userData} />;
+  console.log(userData);
+  return <FormRenderer config={formConfig} initialData={userData || {}} />;
 }

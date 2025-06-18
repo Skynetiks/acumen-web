@@ -16,7 +16,7 @@ import {
 } from "../lib/form-schemas";
 
 export function DocumentUploadStep(props: FormStepProps<DocumentUploadData>) {
-  const { data, isLoading, config } = props;
+  const { data, config } = props;
 
   const { data: uploadedDocuments } = useSuspenseQuery({
     queryKey: [`${config.id}-form-options`],
@@ -58,7 +58,7 @@ export function DocumentUploadStep(props: FormStepProps<DocumentUploadData>) {
     },
     multiple: true,
   });
-
+  console.log(form.formState);
   return (
     <BaseFormStep {...props} form={form}>
       {/* Dropzone Area */}
@@ -82,65 +82,71 @@ export function DocumentUploadStep(props: FormStepProps<DocumentUploadData>) {
           )}
         </div>
       </div>
-      {/* Newly added documents */}
-      {newFiles.length > 0 && (
-        <div className="mt-6 space-y-3">
-          <h4 className="text-sm text-muted-foreground mb-2">New Documents</h4>
-          {newFiles.map((doc) => (
-            <div
-              key={`new-${doc.id}`}
-              className="bg-white rounded-lg p-3 flex items-center justify-between"
-            >
-              <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                  <Check className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <p className="font-medium">{doc.name}</p>
-                  <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                    <span>Format: {doc.format}</span>
-                    <span>Size: {doc.size}</span>
-                  </div>
-                </div>
-              </div>
-              <button
-                type="button"
-                className="p-1 rounded-full hover:bg-gray-100"
-                onClick={() => handleRemoveNew(doc.id)}
+
+      <div className="h-[54vh] overflow-y-auto">
+        {/* Newly added documents */}
+        {newFiles.length > 0 && (
+          <div className="mt-6 space-y-3">
+            <h4 className="text-sm text-muted-foreground mb-2">
+              New Documents
+            </h4>
+            {newFiles.map((doc) => (
+              <div
+                key={`new-${doc.id}`}
+                className="bg-white rounded-lg p-3 flex items-center justify-between"
               >
-                <X className="h-5 w-5 text-gray-400" />
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-      {/* Previously uploaded documents */}
-      {uploadedDocuments?.documents?.length > 0 && (
-        <div className="mt-6 space-y-3">
-          <h4 className="text-sm text-muted-foreground mb-2">
-            Already Uploaded
-          </h4>
-          {uploadedDocuments.documents.map((doc) => (
-            <div
-              key={`existing-${doc.id}`}
-              className="bg-white rounded-lg p-3 flex items-center justify-between"
-            >
-              <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                  <Check className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <p className="font-medium">{doc.name}</p>
-                  <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                    <span>Format: {doc.format}</span>
-                    <span>Size: {doc.size}</span>
+                <div className="flex items-center space-x-3">
+                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                    <Check className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-medium">{doc.name}</p>
+                    <div className="flex items-center space-x-4 text-xs text-muted-foreground">
+                      <span>Format: {doc.format}</span>
+                      <span>Size: {doc.size}</span>
+                    </div>
                   </div>
                 </div>
+                <button
+                  type="button"
+                  className="p-1 rounded-full hover:bg-gray-100"
+                  onClick={() => handleRemoveNew(doc.id)}
+                >
+                  <X className="h-5 w-5 text-gray-400" />
+                </button>
               </div>
+            ))}
+          </div>
+        )}
+        {/* Previously uploaded documents */}
+        {uploadedDocuments?.documents &&
+          uploadedDocuments?.documents?.length > 0 && (
+            <div className="mt-6 space-y-3">
+              <h4 className="text-sm text-muted-foreground mb-2">
+                Already Uploaded
+              </h4>
+              {uploadedDocuments.documents.map((doc) => (
+                <div
+                  key={`existing-${doc.id}`}
+                  className="bg-white rounded-lg p-3 flex items-center justify-between"
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                      <Check className="h-4 w-4 text-white" />
+                    </div>
+                    <div>
+                      <p className="font-medium">{doc.name}</p>
+                      <div className="flex items-center space-x-4 text-xs text-muted-foreground">
+                        <span>Format: {doc.format}</span>
+                        <span>Size: {doc.size}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      )}
+          )}
+      </div>
     </BaseFormStep>
   );
 }

@@ -14,7 +14,7 @@ import { CoursePreferencesStep } from "@/components/form-steps/course-preference
 import { WhyJapanStep } from "@/components/form-steps/why-japan";
 import { ContactPreferencesStep } from "../../../components/form-steps/contact-preferences";
 import { StayConnectedStep } from "@/components/form-steps/stay-connected";
-import { FormSuccess } from "../../../components/form-steps/form-success";
+import { FormSuccess } from "../components/form-success";
 import { fetchStudyPreferencesData } from "@/components/form-steps/study-preferences/data/api";
 import { fetchCoursePreferences } from "@/components/form-steps/course-preferences/data/api";
 import { fetchContactPreferences } from "@/components/form-steps/contact-preferences/data/api";

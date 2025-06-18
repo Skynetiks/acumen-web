@@ -3,8 +3,9 @@ import PageTitle from "@/components/page-title";
 import PageWrapper from "@/components/page-wrapper";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Link } from "@tanstack/react-router";
-import { Menu, GraduationCap, Search } from "lucide-react";
+import { GraduationCap, Search } from "lucide-react";
 
 export function CollegeFinderLanding() {
   return (
@@ -12,7 +13,9 @@ export function CollegeFinderLanding() {
       <PageHeader>
         <div className="bg-background">
           <div className="flex items-center justify-start p-4 gap-6">
-            <Menu className="h-6 w-6 text-primary" />
+            <header className="block md:hidden">
+              <SidebarTrigger className="lg:hidden text-primary" />
+            </header>
             <PageTitle title="Find Universities" />
             <div className="w-6" /> {/* Spacer */}
           </div>
@@ -20,7 +23,7 @@ export function CollegeFinderLanding() {
       </PageHeader>
 
       {/* Main Content */}
-      <div className="p-6 space-y-8">
+      <div className="px-6 ">
         {/* Thank You Message */}
         <Card className="bg-white border-none shadow-none">
           <CardContent className="p-6 text-center space-y-4">
@@ -74,7 +77,7 @@ export function CollegeFinderLanding() {
         {/* Get Started Button */}
         <div className="pt-8 w-full text-center">
           <Button asChild className="max-w-max py-4">
-            <Link to="/universities">Get Started</Link>
+            <Link to="/university">Get Started</Link>
           </Button>
         </div>
       </div>
