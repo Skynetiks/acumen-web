@@ -71,6 +71,8 @@ export interface FormState {
   errors: Record<string, any>;
   isCompleted: boolean;
   metadata: Record<string, any>;
+  _hasHydrated: boolean;
+  setHasHydrated: (value: boolean) => void;
 }
 
 // Form actions interface
@@ -91,4 +93,5 @@ export interface FormActions {
 export interface FormStore extends FormState, FormActions {
   config: FormConfig | null;
   setConfig: (config: FormConfig) => void;
+  // 🆕 Add hydration state
 }

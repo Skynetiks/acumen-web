@@ -31,7 +31,7 @@ export function DatePicker({
 }) {
   const [open, setOpen] = useState(false);
   const date = value;
-  console.log(date);
+
   return (
     <div className=" flex flex-col gap-3">
       <Popover open={open} onOpenChange={setOpen}>

@@ -16,6 +16,7 @@ import { BaseFormStep } from "../base-form-step";
 import { fetchPersonalDetails } from "./data/api";
 import { ControlledSelect } from "../../ui/controlled-select";
 import { DatePicker } from "@/components/ui/date-picker";
+import { useEffect } from "react";
 
 export function PersonalDetailsStep(props: FormStepProps<PersonalDetailsData>) {
   const { data, config } = props;
@@ -23,7 +24,7 @@ export function PersonalDetailsStep(props: FormStepProps<PersonalDetailsData>) {
     queryKey: [`${config.id}-form-options`],
     queryFn: fetchPersonalDetails,
   });
-  console.log(data);
+
   const form = useForm<PersonalDetailsData>({
     resolver: zodResolver(personalDetailsSchema),
     defaultValues: {
@@ -35,7 +36,20 @@ export function PersonalDetailsStep(props: FormStepProps<PersonalDetailsData>) {
     },
     mode: "onChange",
   });
-  console.log(data);
+
+  useEffect(() => {
+    if (data && Object.keys(data).length > 0) {
+      console.log(data);
+      form.reset({
+        ...data,
+        dateOfBirth:
+          "dateOfBirth" in data && data.dateOfBirth
+            ? new Date(data.dateOfBirth)
+            : undefined,
+      });
+    }
+  }, [data]);
+
   return (
     <BaseFormStep {...props} form={form}>
       <div className="grid gap-4">
@@ -49,7 +63,6 @@ export function PersonalDetailsStep(props: FormStepProps<PersonalDetailsData>) {
                 <DatePicker
                   value={field.value}
                   onChange={(e: Date | undefined) => {
-                    console.log(e instanceof Date);
                     field.onChange(e);
                   }}
                   hideFuture={true}

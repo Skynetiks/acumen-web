@@ -9,6 +9,7 @@ import PageHeader from "@/components/page-header";
 import BookingPopup from "../booking/booking-popup";
 import { cn } from "@/lib/utils";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { format } from "date-fns";
 
 interface DashboardProps {
   data: DashboardDataType;
@@ -40,23 +41,29 @@ export default function Dashboard({ data }: DashboardProps) {
         <div className="grid grid-cols-3 gap-3 mb-6">
           <Card className="bg-primary text-white border-0">
             <CardContent className="p-0 text-center">
-              <Search className="w-5 h-5 mx-auto mb-1" />
-              <p className="text-xs">Search</p>
-              <p className="text-xs">Universities</p>
+              <Link to="/university">
+                <Search className="w-5 h-5 mx-auto mb-1" />
+                <p className="text-xs">Search</p>
+                <p className="text-xs">Universities</p>
+              </Link>
             </CardContent>
           </Card>
           <Card className="bg-primary text-white border-0">
             <CardContent className="p-0 text-center">
-              <FileText className="w-5 h-5 mx-auto mb-1" />
-              <p className="text-xs">My</p>
-              <p className="text-xs">Applications</p>
+              <Link to="/application">
+                <FileText className="w-5 h-5 mx-auto mb-1" />
+                <p className="text-xs">My</p>
+                <p className="text-xs">Applications</p>
+              </Link>
             </CardContent>
           </Card>
           <Card className="bg-primary text-white border-0">
             <CardContent className="p-0 text-center">
-              <Calendar className="w-5 h-5 mx-auto mb-1" />
-              <p className="text-xs">Upcoming</p>
-              <p className="text-xs">events</p>
+              <Link to="/events">
+                <Calendar className="w-5 h-5 mx-auto mb-1" />
+                <p className="text-xs">Upcoming</p>
+                <p className="text-xs">events</p>
+              </Link>
             </CardContent>
           </Card>
         </div>
@@ -71,7 +78,7 @@ export default function Dashboard({ data }: DashboardProps) {
       <div className="px-6 mb-8">
         <h2 className="text-lg font-semibold mb-4">Universities</h2>
         <div className="grid grid-cols-2 gap-4">
-          {data.applications.map((university, i) => {
+          {data.universities.map((university, i) => {
             return (
               <Card key={i}>
                 <CardContent className="p-4 flex flex-col gap-4 justify-between items-center">
@@ -136,46 +143,36 @@ export default function Dashboard({ data }: DashboardProps) {
       <div className="px-6 pb-6">
         <h2 className="text-lg font-semibold mb-4">Events</h2>
         <div className="grid grid-cols-2 gap-4">
-          <Card className="border-none shadow-none">
-            <CardContent className=" relative p-0">
-              <div className="absolute left-2 top-1 text-center p-1 bg-white/80 rounded-2xl px-2">
-                <div className="text-md font-bold text-primary">28</div>
-                <div className="text-[10px] text-primary">APRIL</div>
-              </div>
-              <div className="mb-2">
-                <img
-                  src="/assets/dashboard/event1.png"
-                  alt="Event illustration"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <p className="text-xs font-medium mb-1">
-                Your Career starts here
-              </p>
-              <p className="text-xs text-primary">Wed, Apr 28, 5:30PM</p>
-            </CardContent>
-          </Card>
-          <Card className="border-none shadow-none">
-            <CardContent className="relative p-0">
-              <div className="absolute left-2 top-1 text-center p-1 bg-white/80 rounded-2xl px-2">
-                <div className="text-md font-bold text-primary">28</div>
-                <div className="text-[10px] text-primary">APRIL</div>
-              </div>
-              <div className="mb-3">
-                <img
-                  src="/assets/dashboard/event2.png"
-                  alt="Library books"
-                  width={80}
-                  height={60}
-                  className="w-full rounded"
-                />
-              </div>
-              <p className="text-xs font-medium mb-1">
-                Your Career starts here
-              </p>
-              <p className="text-xs text-primary">Wed, Apr 28, 5:30PM</p>
-            </CardContent>
-          </Card>
+          {data.events.map((event, i) => {
+            const date = new Date(event.date);
+            return (
+              <Card key={i} className="border-none shadow-none">
+                <CardContent className=" relative p-0">
+                  <Link to="/events/$eventId" params={{ eventId: event.id }}>
+                    <div className="absolute left-2 top-1 text-center p-1 bg-white/80 rounded-2xl px-2">
+                      <div className="text-md font-bold text-primary">
+                        {format(date, "dd")}
+                      </div>
+                      <div className="text-[10px] text-primary">
+                        {format(date, "MMM")}
+                      </div>
+                    </div>
+                    <div className="mb-2">
+                      <img
+                        src={`${event.image}`}
+                        alt="Event illustration"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <p className="text-xs font-medium mb-1">{event.title}</p>
+                    <p className="text-xs text-primary">
+                      {format(date, "EEE, MMM d - h:mm a")}
+                    </p>
+                  </Link>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </div>
     </PageWrapper>

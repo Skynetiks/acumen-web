@@ -1,10 +1,10 @@
-import type { Event, EventParamsType } from "./schema";
-const images = ["/assets/events.png", "/assets/events2.png"];
-export const mockEvents: Event[] = Array.from({ length: 50 }, (_, i) => ({
-  id: i + 1,
-  title: `Event Title ${i + 1}`,
-  date: "2025-06-20",
-  time: "5:30 PM",
+import type { EventParamsType, EventType } from "./schema";
+const images = ["/assets/dashboard/event1.png", "/assets/dashboard/event2.png"];
+
+export const mockEvents: EventType[] = Array.from({ length: 50 }, (_, i) => ({
+  id: String(i + 1),
+  title: `Your career starts here`,
+  date: new Date().toISOString(),
   location: "Bangalore",
   image: images[i % 2],
 }));
@@ -44,7 +44,7 @@ export async function fetchEvents({
   pageParam?: number;
   pageSize?: number;
   filters?: EventParamsType | {};
-}): Promise<Event[]> {
+}): Promise<EventType[]> {
   const all = mockEvents;
 
   let filtered = [...all];

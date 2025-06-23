@@ -7,7 +7,11 @@ type PageProps = {
 };
 
 function Page({ children, className }: PageProps) {
-  return <div className={cn("min-h-screen grid", className)}>{children}</div>;
+  return (
+    <main className={cn("min-h-screen h-full w-full grid", className)}>
+      {children}
+    </main>
+  );
 }
 
 export default Page;

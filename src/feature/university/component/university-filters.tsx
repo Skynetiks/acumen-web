@@ -10,18 +10,6 @@ export function UniversitySearchAndFilter() {
     "search",
     parseAsString.withDefault("")
   );
-  const [courseName, setCourseName] = useQueryState(
-    "courseName",
-    parseAsString.withDefault("")
-  );
-  const [universityType, setUniversityType] = useQueryState(
-    "universityType",
-    parseAsString.withDefault("")
-  );
-  const [beginAt, setBeginAt] = useQueryState(
-    "beginAt",
-    parseAsString.withDefault("September 2025")
-  );
 
   // Local state to debounce the input
   const [searchInput, setSearchInput] = useState(search);
@@ -48,14 +36,7 @@ export function UniversitySearchAndFilter() {
             className="pl-10 border-none"
           />
         </div>
-        <UniversityFilterModal
-          onFilter={({ courseName, universityType, beginAt }) => {
-            setCourseName(courseName);
-            setUniversityType(universityType);
-            setBeginAt(beginAt);
-          }}
-          filters={{ courseName, universityType, beginAt }}
-        />
+        <UniversityFilterModal />
       </div>
     </div>
   );

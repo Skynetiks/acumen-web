@@ -11,9 +11,10 @@ function Onboarding() {
   const [checkingStorage, setCheckingStorage] = useState(true);
 
   useEffect(() => {
-    const storedData = localStorage.getItem("form-storage-onboarding");
+    const storedData: any = localStorage.getItem("form-storage-onboarding");
+    const data = JSON.parse(storedData);
 
-    if (storedData) {
+    if (data && data.state.isFormCompleted) {
       navigate({ to: "/dashboard" });
     } else {
       setCheckingStorage(false); // only show form if onboarding is not complete

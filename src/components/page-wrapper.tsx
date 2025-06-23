@@ -11,13 +11,7 @@ type PageProps = {
 
 function PageWrapper({ children, className }: PageProps) {
   return (
-    <div
-      className={cn(
-        "self-center justify-self-center",
-        "w-full h-full flex flex-col gap-6",
-        className
-      )}
-    >
+    <div className={cn("", "w-full h-full flex flex-col gap-6", className)}>
       {children}
     </div>
   );

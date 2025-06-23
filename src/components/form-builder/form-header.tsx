@@ -20,14 +20,16 @@ export function FormHeader({
   progress,
 }: FormHeaderProps) {
   return (
-    <div className="">
-      {showBackButton && (
+    <div className="h-full">
+      {showBackButton ? (
         <ArrowLeft
           strokeWidth={3}
           size={26}
           className="cursor-pointer text-primary"
           onClick={onBack}
         />
+      ) : (
+        <div className="h-6" />
       )}
 
       <div className="space-y-1 pt-4">

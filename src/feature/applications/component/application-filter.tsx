@@ -5,25 +5,11 @@ import { Search } from "lucide-react";
 import { ApplicationFilterModal } from "./application-filter-modal";
 
 export function ApplicationSearchAndFilter() {
-  // Each call returns [value, setValue] synced with URL query param
   const [search, setSearch] = useQueryState(
     "search",
     parseAsString.withDefault("")
   );
-  const [courseName, setCourseName] = useQueryState(
-    "courseName",
-    parseAsString.withDefault("")
-  );
-  const [universityType, setUniversityType] = useQueryState(
-    "universityType",
-    parseAsString.withDefault("")
-  );
-  const [beginAt, setBeginAt] = useQueryState(
-    "beginAt",
-    parseAsString.withDefault("September 2025")
-  );
 
-  // Local state to debounce the input
   const [searchInput, setSearchInput] = useState(search);
 
   useEffect(() => {
@@ -48,14 +34,7 @@ export function ApplicationSearchAndFilter() {
             className="pl-10 border-none"
           />
         </div>
-        <ApplicationFilterModal
-          onFilter={({ courseName, universityType, beginAt }) => {
-            setCourseName(courseName);
-            setUniversityType(universityType);
-            setBeginAt(beginAt);
-          }}
-          filters={{ courseName, universityType, beginAt }}
-        />
+        <ApplicationFilterModal />
       </div>
     </div>
   );

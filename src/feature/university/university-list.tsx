@@ -35,6 +35,11 @@ export function UniversityList({
       pageSize: PAGE_SIZE,
     });
 
+  function clearOnBoardingData() {
+    localStorage.removeItem("form-storage-onboarding");
+    //   window.location.replace("/");
+  }
+
   return (
     <PageWrapper>
       <PageHeader>
@@ -44,6 +49,7 @@ export function UniversityList({
             <div className="flex justify-between items-center gap-4">
               <PageTitle title="University Finder" />
               <Link
+                onClick={clearOnBoardingData}
                 to={"/onboarding"}
                 className="text-primary font-medium text-sm p-0"
               >

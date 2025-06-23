@@ -21,9 +21,10 @@ import {
   CalendarCheck,
   LogOutIcon,
 } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/lib/providers/auth-context";
 import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
@@ -37,6 +38,7 @@ const menuItems = [
 
 export default function AppSidebar() {
   const { logout } = useAuth();
+  const router = useRouterState();
   return (
     <Sidebar
       side="left"
@@ -53,27 +55,42 @@ export default function AppSidebar() {
               className="w-full h-full object-cover"
             />
           </div>
-          <Pencil className=" text-primary w-4 h-4" />
+          <Pencil className=" text-primary w-4 h-4 cursor-pointer" />
         </div>
         <span className="font-semibold">Rohit Sharma</span>
       </SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu className="gap-4 pt-4">
-            {menuItems.map((item) => (
-              <SidebarMenuItem key={item.to} className="gap-8">
-                <SidebarMenuButton asChild className="text-md">
-                  <Link
-                    to={item.to}
-                    className="flex items-center gap-3 p-3 hover:bg-muted rounded-md"
+          <SidebarMenu className="gap-3">
+            {menuItems.map((item) => {
+              const isActive = router.location.pathname.startsWith(item.to);
+              return (
+                <SidebarMenuItem
+                  key={item.to}
+                  className={cn("text-sm p-1 rounded-md")}
+                >
+                  <SidebarMenuButton
+                    className={cn(
+                      "text-md py-4 ",
+                      isActive
+                        ? "bg-primary border border-primary hover:bg-primary text-white hover:text-white rounded-md"
+                        : "hover:ring"
+                    )}
                   >
-                    <item.icon className="w-5 h-5 text-muted-foreground" />
-                    <span>{item.label}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
+                    <Link to={item.to} className="flex items-center gap-3 p-3">
+                      <item.icon
+                        className={cn(
+                          "w-5 h-5 text-muted-foreground",
+                          isActive ? "text-white" : "text-muted-foreground"
+                        )}
+                      />
+                      <span>{item.label}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              );
+            })}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>

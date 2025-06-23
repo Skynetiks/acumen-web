@@ -13,14 +13,15 @@ export function useForm(config: FormConfig, initialData?: Record<string, any>) {
 
   // Populate form with initial data only once
   useEffect(() => {
+    if (!store._hasHydrated) return;
     if (initialData && Object.keys(initialData).length > 0) {
       store.populateForm(initialData);
     }
-  }, []); // Empty dependency array to run only once
+  }, [store._hasHydrated, initialData]); // Empty dependency array to run only once
 
+  //prefetch next form step
   useEffect(() => {
     if (!config) return;
-
     const nextStep = config.steps[store.currentStep];
     if (nextStep?.prefetchData && nextStep.id && nextStep.queryFn) {
       queryClient.prefetchQuery({
@@ -57,7 +58,6 @@ export function useForm(config: FormConfig, initialData?: Record<string, any>) {
 
       // Validate data
       const validatedData = currentStepConfig.schema.parse(data);
-      console.log(validatedData);
       // Update store
       store.updateFormData(currentStepConfig.id, validatedData);
 
@@ -150,5 +150,7 @@ export function useForm(config: FormConfig, initialData?: Record<string, any>) {
     isFirstStep: store.currentStep === 1,
     isLastStep: store.currentStep === config.steps.length,
     progress: (store.currentStep / config.steps.length) * 100,
+    // has hydrated
+    hasHydrated: store._hasHydrated,
   };
 }

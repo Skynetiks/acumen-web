@@ -28,7 +28,7 @@ export function getUniversityApplicationConfig(
   universityId: string
 ): FormConfig {
   return {
-    id: "university-application",
+    id: `university-application-${universityId}`,
     title: "University Application",
     persistData: true,
     showProgress: true,

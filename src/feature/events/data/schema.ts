@@ -1,14 +1,17 @@
 import { z } from "zod";
 
 // /events/data/types.ts
-export interface Event {
-  id: number;
-  title: string;
-  date: string;
-  time: string;
-  location: string;
-  image: string;
-}
+export const eventSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  date: z.string(),
+  location: z.string(),
+  image: z.string(),
+});
+
+export const eventsSchema = z.array(eventSchema);
+
+export type EventType = z.infer<typeof eventSchema>;
 
 export interface EventFilters {
   search?: string;

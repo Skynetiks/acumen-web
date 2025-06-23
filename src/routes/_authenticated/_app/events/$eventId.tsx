@@ -15,7 +15,6 @@ export const Route = createFileRoute("/_authenticated/_app/events/$eventId")({
 
 function EventDetailsPage() {
   const event = Route.useLoaderData();
-  const { eventId } = Route.useParams();
 
-  return <EventDetails event={event} eventId={eventId} />;
+  return <EventDetails event={event} />;
 }

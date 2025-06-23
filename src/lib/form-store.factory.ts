@@ -11,22 +11,38 @@ export function createFormStore(config: FormConfig) {
     errors: {},
     isCompleted: false,
     metadata: {},
+    _hasHydrated: false,
+    setHasHydrated: () => {},
   };
 
   return create<FormStore>()(
     config.persistData
       ? persist(
-          (set, get) => createFormActions(set, get, config, initialState),
+          (set, get) => {
+            const store = createFormActions(set, get, config, initialState);
+            return {
+              ...store,
+              _hasHydrated: false,
+              setHasHydrated: (value: boolean) => set({ _hasHydrated: value }),
+            };
+          },
           {
             name: `form-storage-${config.id}`,
             partialize: (state) => ({
+              isFormCompleted: state.isCompleted,
               currentStep: state.currentStep,
               formData: state.formData,
               metadata: state.metadata,
             }),
+            onRehydrateStorage: (state) => {
+              return () => state.setHasHydrated(true);
+            },
           }
         )
-      : (set, get) => createFormActions(set, get, config, initialState)
+      : (set, get) => ({
+          ...createFormActions(set, get, config, initialState),
+          _hasHydrated: true, // no persistence means instantly hydrated
+        })
   );
 }
 

@@ -1,14 +1,16 @@
 import { MapPin } from "lucide-react";
 import { LoadMoreTrigger } from "@/components/load-more-button";
 import { usePagination } from "@/hooks/use-pagination";
-import type { Event, EventParamsType } from "../data/schema";
+import type { EventType, EventParamsType } from "../data/schema";
 import { fetchEvents } from "../data/api";
+import { format } from "date-fns";
+import { Link } from "@tanstack/react-router";
 
 const PAGE_SIZE = 10;
 
 export function EventsList({ params }: { params: EventParamsType }) {
   const { items, loadMoreRef, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    usePagination<EventParamsType, Event>({
+    usePagination<EventParamsType, EventType>({
       queryKey: ["events", params],
       fetchFn: ({ pageParam, filters }) =>
         fetchEvents({ pageParam, filters, pageSize: PAGE_SIZE }),
@@ -23,21 +25,26 @@ export function EventsList({ params }: { params: EventParamsType }) {
     });
 
   return (
-    <div className="p-8 grid grid-cols-1 gap-8 md:grid-cols-2 ">
+    <div className="p-8 grid grid-cols-1 gap-10 md:grid-cols-2 ">
       {items.map((event) => (
-        <div key={event.id} className="flex items-start gap-4 cursor-pointer">
+        <Link
+          to="/events/$eventId"
+          params={{ eventId: event.id }}
+          key={event.id}
+          className="flex items-start gap-4 cursor-pointer"
+        >
           <div className="w-20 h-20 rounded-2xl overflow-hidden">
             <img
               src={event.image}
               alt={event.title}
-              width={80}
-              height={80}
+              width={100}
+              height={100}
               className="w-full h-full object-cover"
             />
           </div>
           <div className="flex-1 pt-1">
             <p className="text-primary text-sm mb-1">
-              {event.date} • {event.time}
+              {format(new Date(event.date), "EEE, MMM d - h:mm a")}
             </p>
             <h3 className="font-bold text-[18px] text-gray-900 mb-2 leading-tight">
               {event.title}
@@ -47,7 +54,7 @@ export function EventsList({ params }: { params: EventParamsType }) {
               <span className="text-[15px]">{event.location}</span>
             </div>
           </div>
-        </div>
+        </Link>
       ))}
 
       <div ref={loadMoreRef} className="h-8" />

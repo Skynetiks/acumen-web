@@ -9,6 +9,5 @@ export async function universitiesLoader() {
       queryFn: () => fetchDashboardData(),
     });
   } catch (error) {}
-  console.log(queryClient.getQueriesData({ queryKey: key }));
   return null;
 }

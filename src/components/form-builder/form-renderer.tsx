@@ -6,6 +6,7 @@ import { useForm } from "@/hooks/use-form";
 import type { FormConfig } from "@/types/form.types";
 import PageWrapper from "../page-wrapper";
 import { cn } from "@/lib/utils";
+import { Loader } from "lucide-react";
 
 interface FormRendererProps {
   config: FormConfig;
@@ -29,13 +30,14 @@ export function FormRenderer({
     handleStepSkip,
     prevStep,
     progress,
+    hasHydrated,
   } = useForm(config, initialData);
 
   // Show success screen if completed
   if (isCompleted && config.successComponent) {
     const FormSuccess = config.successComponent;
     return (
-      <PageWrapper className="self-center justify-self-center">
+      <PageWrapper className="justify-center">
         <Card
           className={cn(
             "w-full h-full border-none md:border shadow-none",
@@ -56,32 +58,34 @@ export function FormRenderer({
   const StepComponent = currentStepConfig.component;
 
   return (
-    <PageWrapper className="self-center justify-self-center">
+    <PageWrapper className="bg-gray-100 justify-center">
       <Card
         className={cn(
           "w-full h-screen shadow-none md:shadow-lg border-none md:border",
           className
         )}
       >
-        <CardContent className="px-8 h-full">
-          <div className="h-full flex flex-col gap-4 justify-between">
-            <div className="shrink-0">
-              {config.showProgress !== false && (
-                <FormHeader
-                  title={currentStepConfig.title}
-                  subtitle={currentStepConfig.subtitle}
-                  currentStep={formContext.currentStep}
-                  totalSteps={formContext.totalSteps}
-                  onBack={prevStep}
-                  showBackButton={
-                    currentStepConfig.showBackButton !== false &&
-                    formContext.currentStep > 1
-                  }
-                  progress={progress}
-                />
-              )}
-            </div>
-            <div className="flex-1">
+        <CardContent className="px-8 h-full flex flex-col gap-4 justify-between">
+          <div className="shrink-0 h-[20%]">
+            {config.showProgress !== false && (
+              <FormHeader
+                title={currentStepConfig.title}
+                subtitle={currentStepConfig.subtitle}
+                currentStep={formContext.currentStep}
+                totalSteps={formContext.totalSteps}
+                onBack={prevStep}
+                showBackButton={
+                  currentStepConfig.showBackButton !== false &&
+                  formContext.currentStep > 1
+                }
+                progress={progress}
+              />
+            )}
+          </div>
+          <div className="grow h-[80%]">
+            {!hasHydrated ? (
+              <Loader size={16} className="animate-spin" />
+            ) : (
               <StepComponent
                 data={currentStepData}
                 errors={currentStepErrors}
@@ -96,7 +100,7 @@ export function FormRenderer({
                 config={currentStepConfig}
                 formContext={formContext}
               />
-            </div>
+            )}
           </div>
         </CardContent>
       </Card>

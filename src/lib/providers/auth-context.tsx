@@ -1,4 +1,3 @@
-import { Navigate } from "@tanstack/react-router";
 import * as React from "react";
 
 export interface AuthContext {
@@ -31,7 +30,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = React.useCallback(async () => {
     setStoredUser(null);
     setUser(null);
-    Navigate({ to: "/auth/login" });
+    window.location.replace("/auth/login");
   }, []);
 
   const login = React.useCallback(async (username: string) => {

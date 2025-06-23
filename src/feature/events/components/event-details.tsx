@@ -1,29 +1,25 @@
-"use client";
-
 import PageWrapper from "@/components/page-wrapper";
 import PageHeader from "@/components/page-header";
 import NavigateBackArrow from "@/components/navigate-back-arrow";
 import { Button } from "@/components/ui/button";
 import PageTitle from "@/components/page-title";
 import { Calendar, MapPin } from "lucide-react";
-import type { Event } from "../data/schema";
+import type { EventType } from "../data/schema";
+import { format } from "date-fns";
 
 export default function EventDetails({
   event,
-  eventId,
 }: {
-  event: Event | undefined;
-  eventId: string;
+  event: EventType | undefined;
 }) {
-  console.log(event, eventId);
   return (
     <PageWrapper className="p-0">
       {/* Hero Section */}
-      <div className="relative h-[400px] bg-gradient-to-br from-blue-900 via-blue-800 to-orange-400 overflow-hidden rounded-b-3xl">
+      <div className="relative h-[400px]">
         <img
-          src="/placeholder.svg?height=400&width=400"
-          alt="Train station"
-          className="object-cover opacity-80"
+          src={event?.image}
+          alt={event?.title}
+          className="object-cover w-full h-full opacity-80"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/60" />
 
@@ -31,17 +27,19 @@ export default function EventDetails({
         <div className="absolute top-12 left-0 right-0 px-6 z-10">
           <PageHeader>
             <div className="flex items-center justify-between gap-4">
-              <NavigateBackArrow to="/" />
+              <NavigateBackArrow to="/events" />
               <PageTitle title="Event Details" className="text-white text-xl" />
               <div className="bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1.5">
-                <span className="text-white text-sm font-medium">#3611</span>
+                <span className="text-white text-sm font-medium">
+                  {event?.id}
+                </span>
               </div>
             </div>
           </PageHeader>
         </div>
 
         {/* CTA Button */}
-        <div className="absolute bottom-6 left-6 right-6 z-10">
+        <div className="absolute -bottom-6 left-6 right-6 z-10">
           <Button className="w-full bg-white text-primary hover:bg-gray-50 rounded-full h-14 text-lg font-semibold shadow-lg">
             Interested
           </Button>
@@ -49,22 +47,25 @@ export default function EventDetails({
       </div>
 
       {/* Main Content */}
-      <div className="px-6 py-8 bg-white -mt-6 rounded-t-3xl">
+      <div className="px-10 py-8 mt-8 bg-white rounded-t-3xl">
         <h2 className="text-[32px] font-bold mb-10 leading-tight text-gray-900">
-          Your Career Starts Here
+          {event?.title}
         </h2>
 
         {/* Event Info */}
         <div className="space-y-8 mb-10">
           <EventInfoItem
             icon={<Calendar className="w-6 h-6 text-primary" />}
-            title="14 December, 2021"
-            subtitle="Tuesday, 4:00PM - 9:00PM"
+            title={format(new Date(event?.date || new Date()), "dd MMM, yyyy")}
+            subtitle={format(
+              new Date(event?.date || new Date()),
+              "EEE, MMM d - h:mm a"
+            )}
           />
           <EventInfoItem
             icon={<MapPin className="w-6 h-6 text-primary" />}
-            title="Gala Convention Center"
-            subtitle="36 Bangalore"
+            title={event?.location || "Gala Convention Center"}
+            subtitle={event?.location || "36 Bangalore"}
           />
           <EventInfoItem
             icon={

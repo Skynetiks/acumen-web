@@ -58,10 +58,8 @@ export function DocumentUploadStep(props: FormStepProps<DocumentUploadData>) {
     },
     multiple: true,
   });
-  console.log(form.formState);
   return (
     <BaseFormStep {...props} form={form}>
-      {/* Dropzone Area */}
       <div
         {...getRootProps()}
         className={clsx(
@@ -83,13 +81,11 @@ export function DocumentUploadStep(props: FormStepProps<DocumentUploadData>) {
         </div>
       </div>
 
-      <div className="h-[54vh] overflow-y-auto">
+      <div className="flex flex-col gap-4 pt-4">
         {/* Newly added documents */}
-        {newFiles.length > 0 && (
-          <div className="mt-6 space-y-3">
-            <h4 className="text-sm text-muted-foreground mb-2">
-              New Documents
-            </h4>
+        {newFiles.length > 0 ? (
+          <div className="flex flex-col gap-2">
+            <h4 className="text-sm text-muted-foreground">New Documents</h4>
             {newFiles.map((doc) => (
               <div
                 key={`new-${doc.id}`}
@@ -117,35 +113,39 @@ export function DocumentUploadStep(props: FormStepProps<DocumentUploadData>) {
               </div>
             ))}
           </div>
+        ) : (
+          <div />
         )}
         {/* Previously uploaded documents */}
         {uploadedDocuments?.documents &&
-          uploadedDocuments?.documents?.length > 0 && (
-            <div className="mt-6 space-y-3">
-              <h4 className="text-sm text-muted-foreground mb-2">
-                Already Uploaded
-              </h4>
-              {uploadedDocuments.documents.map((doc) => (
-                <div
-                  key={`existing-${doc.id}`}
-                  className="bg-white rounded-lg p-3 flex items-center justify-between"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                      <Check className="h-4 w-4 text-white" />
-                    </div>
-                    <div>
-                      <p className="font-medium">{doc.name}</p>
-                      <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                        <span>Format: {doc.format}</span>
-                        <span>Size: {doc.size}</span>
-                      </div>
+        uploadedDocuments?.documents?.length > 0 ? (
+          <div className=" ">
+            <h4 className="text-sm text-muted-foreground mb-2">
+              Already Uploaded
+            </h4>
+            {uploadedDocuments.documents.map((doc) => (
+              <div
+                key={`existing-${doc.id}`}
+                className="bg-white rounded-lg p-3 flex items-center justify-between"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                    <Check className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-medium">{doc.name}</p>
+                    <div className="flex items-center space-x-4 text-xs text-muted-foreground">
+                      <span>Format: {doc.format}</span>
+                      <span>Size: {doc.size}</span>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div />
+        )}
       </div>
     </BaseFormStep>
   );

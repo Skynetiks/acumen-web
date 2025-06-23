@@ -8,6 +8,7 @@ import {
   whyJapanSchema,
 } from "@/components/form-steps/lib/form-schemas";
 import { z } from "zod";
+import type { UniversityApplicationType } from "../config/validation-schema";
 
 export const userSchema = z.object({
   personalDetails: personalDetailsSchema,
@@ -20,8 +21,10 @@ export const userSchema = z.object({
 });
 
 export default function fetchUserData() {
-  const stored: any = localStorage.getItem("form-storage-onboarding");
-  console.log(stored.formData);
-  if (!stored.formData) return null;
-  return stored.formData;
+  const stored = localStorage.getItem("form-storage-onboarding");
+  if (!stored) return null;
+  const data = JSON.parse(stored);
+  const result: UniversityApplicationType = data.state.formData;
+  if (!result) return null;
+  return result;
 }

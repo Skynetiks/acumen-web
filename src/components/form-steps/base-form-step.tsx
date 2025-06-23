@@ -27,44 +27,42 @@ export function BaseFormStep<T extends FieldValues>({
   showSkipButton = false,
 }: BaseFormStepProps<T>) {
   return (
-    <div className="h-full">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="h-full flex flex-col justify-between gap-4"
-        >
-          <div>{children}</div>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="h-full min-h-0 flex flex-col justify-between gap-4"
+      >
+        <div className=" md:h-[88%] overflow-y-auto">{children}</div>
 
-          <div className=" space-y-3 flex justify-end items-center gap-4">
+        <div className="md:h-[12%] justify-self-end flex justify-end items-center gap-4">
+          <Button
+            type="submit"
+            className={`w-full md:w-max py-3`}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              submitButtonText || config.buttonText || "Proceed to Next"
+            )}
+          </Button>
+
+          {showSkipButton && onSkip && (
             <Button
-              type="submit"
-              className={`w-full md:w-max py-3`}
+              type="button"
+              variant="outline"
+              className="w-full md:w-max py-3"
+              onClick={onSkip}
               disabled={isLoading}
             >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                submitButtonText || config.buttonText || "Proceed to Next"
-              )}
+              Skip this step
             </Button>
-
-            {showSkipButton && onSkip && (
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full md:w-max py-3"
-                onClick={onSkip}
-                disabled={isLoading}
-              >
-                Skip this step
-              </Button>
-            )}
-          </div>
-        </form>
-      </Form>
-    </div>
+          )}
+        </div>
+      </form>
+    </Form>
   );
 }

@@ -32,7 +32,6 @@ const mockStudyPreferencesData = {
 };
 
 export async function fetchStudyPreferencesData(): Promise<StudyPreferencesFormData> {
-  console.log("here");
   const result = studyPreferencesFormSchema.safeParse(mockStudyPreferencesData);
   if (!result.success) {
     console.error(result.error.format());

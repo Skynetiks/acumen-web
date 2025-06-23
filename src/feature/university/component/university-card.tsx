@@ -33,7 +33,7 @@ function UniversityCard({ university }: { university: University }) {
                   <p className="text-sm">{university.universityType}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Begin at</p>
+                  <p className="text-sm text-muted-foreground">Begins at</p>
                   <p className="text-sm">{university.beginsAt}</p>
                 </div>
               </div>

@@ -1,145 +1,141 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import {
   Select,
-  SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectContent,
+  SelectItem,
 } from "@/components/ui/select";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { ListFilter } from "lucide-react";
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+} from "@/components/ui/form";
 import { MonthYearPicker } from "@/components/ui/month-year-picker";
+import { universityParams, type UniversityParamsType } from "../data/schema";
+import { ResponsiveFilterWrapper } from "@/components/filter-wrapper";
+import { parseAsString, useQueryState } from "nuqs";
 
-interface UniversityFilterModalProps {
-  onFilter: (filters: {
-    courseName: string;
-    universityType: string;
-    beginAt: string;
-  }) => void;
-  filters: {
-    courseName: string;
-    universityType: string;
-    beginAt: string;
-  };
-}
+const defaultValues: UniversityParamsType = {
+  courseName: "",
+  universityType: "",
+  beginsAt: "September 2025",
+};
 
-export function UniversityFilterModal({
-  onFilter,
-  filters,
-}: UniversityFilterModalProps) {
-  const [courseName, setCourseName] = useState(filters.courseName || "");
-  const [universityType, setUniversityType] = useState(
-    filters.universityType || ""
+export function UniversityFilterModal() {
+  const [courseName, setCourseName] = useQueryState(
+    "courseName",
+    parseAsString.withDefault("")
   );
-  const [beginAt, setBeginAt] = useState(filters.beginAt || "September 2025");
+  const [universityType, setUniversityType] = useQueryState(
+    "universityType",
+    parseAsString.withDefault("")
+  );
+  const [beginsAt, setBeginsAt] = useQueryState(
+    "beginsAt",
+    parseAsString.withDefault("September 2025")
+  );
 
-  // Keep local state synced with props
-  useEffect(() => {
-    setCourseName(filters.courseName);
-    setUniversityType(filters.universityType);
-    setBeginAt(filters.beginAt);
-  }, [filters]);
+  const form = useForm<UniversityParamsType>({
+    resolver: zodResolver(universityParams),
+    defaultValues: {
+      courseName,
+      universityType,
+      beginsAt,
+    },
+  });
 
-  const handleFilter = () => {
-    onFilter({
-      courseName: courseName.trim(),
-      universityType: universityType.trim(),
-      beginAt: beginAt.trim(),
-    });
+  const handleSubmit = (data: UniversityParamsType) => {
+    setCourseName(data.courseName?.trim() || "");
+    setUniversityType(data.universityType?.trim() || "");
+    setBeginsAt(data.beginsAt?.trim() || "");
   };
 
   const handleReset = () => {
     setCourseName("");
     setUniversityType("");
-    setBeginAt("September 2025");
-
-    onFilter({
-      courseName: "",
-      universityType: "",
-      beginAt: "September 2025",
-    });
+    setBeginsAt("September 2025");
+    form.reset(defaultValues);
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="p-2 rounded-full flex items-center">
-          <span className="p-1 bg-white rounded-full">
-            <ListFilter className="h-4 w-4 text-primary" strokeWidth={3} />
-          </span>
-          <span>Filters&nbsp;</span>
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md mx-4">
-        <DialogHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <DialogTitle className="text-lg font-semibold">
-            Filter Universities
-          </DialogTitle>
-        </DialogHeader>
-
-        <div className="space-y-6">
+    <ResponsiveFilterWrapper
+      formId="university-filter-form"
+      onSubmit={form.handleSubmit(handleSubmit)}
+      onReset={handleReset}
+    >
+      <Form {...form}>
+        <form
+          id="university-filter-form"
+          className="space-y-6"
+          onSubmit={form.handleSubmit(handleSubmit)}
+          onReset={handleReset}
+        >
           {/* Course Name */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Enter Course Name</label>
-            <Input
-              value={courseName}
-              onChange={(e) => setCourseName(e.target.value)}
-              placeholder="All"
-              className="w-full"
-            />
-          </div>
+          <FormField
+            control={form.control}
+            name="courseName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Enter Course Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="All" {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
           {/* University Type */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">University Type</label>
-            <Select
-              value={universityType || "All"}
-              onValueChange={(v) => setUniversityType(v === "All" ? "" : v)}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="All" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All">All</SelectItem>
-                <SelectItem value="Public">Public</SelectItem>
-                <SelectItem value="Private">Private</SelectItem>
-                <SelectItem value="National">National</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <FormField
+            control={form.control}
+            name="universityType"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>University Type</FormLabel>
+                <FormControl>
+                  <Select
+                    value={field.value || "All"}
+                    onValueChange={(val) =>
+                      field.onChange(val === "All" ? "" : val)
+                    }
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="All" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="All">All</SelectItem>
+                      <SelectItem value="Public">Public</SelectItem>
+                      <SelectItem value="Private">Private</SelectItem>
+                      <SelectItem value="National">National</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
-          {/* Begin At */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Begins At</label>
-            <MonthYearPicker
-              value={beginAt}
-              onChange={(val) => setBeginAt(val)}
-            />
-          </div>
-
-          {/* Action Buttons */}
-          <div className="space-y-3 pt-4">
-            <Button onClick={handleFilter} className="w-full py-3">
-              Filter
-            </Button>
-            <Button
-              onClick={handleReset}
-              variant="outline"
-              className="w-full py-3"
-            >
-              Reset Filters
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+          {/* Begins At */}
+          <FormField
+            control={form.control}
+            name="beginsAt"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Begins At</FormLabel>
+                <FormControl>
+                  <MonthYearPicker
+                    value={field.value || ""}
+                    onChange={(val) => field.onChange(val)}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
+    </ResponsiveFilterWrapper>
   );
 }
