@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Link } from "@tanstack/react-router";
-import { GraduationCap, Search, UserPen } from "lucide-react";
 
 export function CollegeFinderLanding() {
   return (
