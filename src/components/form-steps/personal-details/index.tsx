@@ -39,7 +39,6 @@ export function PersonalDetailsStep(props: FormStepProps<PersonalDetailsData>) {
 
   useEffect(() => {
     if (data && Object.keys(data).length > 0) {
-      console.log(data);
       form.reset({
         ...data,
         dateOfBirth:

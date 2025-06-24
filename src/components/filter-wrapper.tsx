@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "@uidotdev/usehooks";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { ListFilter } from "lucide-react";
 
 interface ResponsiveFilterWrapperProps {
@@ -32,6 +32,7 @@ export function ResponsiveFilterWrapper({
   onSubmit,
   formId,
 }: ResponsiveFilterWrapperProps) {
+  const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const TriggerButton = (
@@ -51,7 +52,10 @@ export function ResponsiveFilterWrapper({
           form={formId}
           variant="outline"
           className="rounded-full h-10 w-full border-gray-300 text-gray-600 font-semibold"
-          onClick={onReset}
+          onClick={() => {
+            setOpen(false);
+            return onReset;
+          }}
         >
           RESET
         </Button>
@@ -62,7 +66,10 @@ export function ResponsiveFilterWrapper({
           form={formId}
           variant="default"
           className="rounded-full w-full h-10"
-          onClick={onSubmit}
+          onClick={() => {
+            setOpen(false);
+            return onSubmit;
+          }}
         >
           APPLY
         </Button>
@@ -79,7 +86,7 @@ export function ResponsiveFilterWrapper({
 
   if (isDesktop) {
     return (
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>{TriggerButton}</DialogTrigger>
         <DialogContent className="max-w-xl p-4 py-8 border-0 rounded-2xl">
           <DialogTitle>{modalTitle || "Filters"}</DialogTitle>
@@ -90,7 +97,7 @@ export function ResponsiveFilterWrapper({
   }
 
   return (
-    <Drawer>
+    <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{TriggerButton}</DrawerTrigger>
       <DrawerContent className="!max-h-[90vh] rounded-t-3xl border-0 p-4">
         <DrawerTitle className="pb-4">{modalTitle || "Filters"}</DrawerTitle>

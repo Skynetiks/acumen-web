@@ -32,7 +32,9 @@ export function BaseFormStep<T extends FieldValues>({
         onSubmit={form.handleSubmit(onSubmit)}
         className="h-full min-h-0 flex flex-col justify-between gap-4"
       >
-        <div className=" md:h-[88%] overflow-y-auto">{children}</div>
+        <div className=" md:h-[88%] overflow-y-auto flex flex-col gap-8">
+          {children}
+        </div>
 
         <div className="md:h-[12%] justify-self-end flex justify-end items-center gap-4">
           <Button

@@ -4,6 +4,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import {
@@ -25,6 +26,7 @@ interface ControlledSelectProps<TFormValues extends FieldValues> {
   form: UseFormReturn<TFormValues>;
   name: Path<TFormValues>;
   options: Option[];
+  label?: string;
   placeholder?: string;
   disabled?: boolean;
 }
@@ -33,6 +35,7 @@ export function ControlledSelect<TFormValues extends FieldValues>({
   form,
   name,
   options,
+  label,
   placeholder,
   disabled = false,
 }: ControlledSelectProps<TFormValues>) {
@@ -42,13 +45,16 @@ export function ControlledSelect<TFormValues extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
+          {label && label !== "" ? (
+            <FormLabel className="text-sm font-medium">{label}</FormLabel>
+          ) : null}
           <Select
             onValueChange={field.onChange}
             value={field.value ?? ""}
             disabled={disabled}
           >
             <FormControl>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full text-secondary-foreground">
                 <SelectValue placeholder={placeholder ?? "Select an option"} />
               </SelectTrigger>
             </FormControl>

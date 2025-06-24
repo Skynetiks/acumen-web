@@ -12,11 +12,11 @@ export const CustomToggle = React.forwardRef<HTMLButtonElement, ToggleProps>(
         pressed={pressed}
         variant={"outline"}
         className={cn(
-          " py-2 h-[unset] cursor-pointer",
+          " py-2 h-[unset] cursor-pointer !text-secondary-foreground",
           className,
           pressed
             ? "!text-primary border-primary !bg-transparent"
-            : "hover:bg-transparent text-foreground hover:text-foreground"
+            : "hover:bg-transparent hover:text-foreground !text-secondary-foreground"
         )}
         {...props}
       />

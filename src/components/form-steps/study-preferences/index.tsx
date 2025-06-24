@@ -42,6 +42,7 @@ export function StudyPreferencesStep(
         <ControlledSelect<StudyPreferencesData>
           form={form}
           name="preferredLevelOfStudy"
+          label="Student Preference"
           placeholder="Preferred Level of Study"
           options={studyPreferences.preferredLevelOfStudyOptions}
         />
@@ -98,7 +99,7 @@ export function StudyPreferencesStep(
                 Preferred Intake Seasons
               </FormLabel>
               <FormControl>
-                <div className="grid grid-cols-2 gap-3 mt-3">
+                <div className="grid grid-cols-2 gap-3 mt-3 text-secondary-foreground">
                   {studyPreferences.intakeOptions.map((intake) => {
                     const isSelected = field.value?.includes(intake.value);
                     return (

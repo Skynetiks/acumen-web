@@ -37,7 +37,7 @@ export function WhyJapanStep(props: FormStepProps<WhyJapanData>) {
         name="whyJapan"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700">
+            <FormLabel className="text-sm font-medium">
               Reasons for Studying in Japan
             </FormLabel>
             <FormControl>

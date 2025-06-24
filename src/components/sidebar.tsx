@@ -70,15 +70,15 @@ export default function AppSidebar() {
                   key={item.to}
                   className={cn("text-sm p-1 rounded-md")}
                 >
-                  <SidebarMenuButton
-                    className={cn(
-                      "text-md py-4 ",
-                      isActive
-                        ? "bg-primary border border-primary hover:bg-primary text-white hover:text-white rounded-md"
-                        : "hover:ring"
-                    )}
-                  >
-                    <Link to={item.to} className="flex items-center gap-3 p-3">
+                  <Link to={item.to} className=" ">
+                    <SidebarMenuButton
+                      className={cn(
+                        "text-md py-4 flex items-center gap-3 p-3 cursor-pointer",
+                        isActive
+                          ? "bg-primary border border-primary hover:bg-primary text-white hover:text-white rounded-md"
+                          : "hover:ring"
+                      )}
+                    >
                       <item.icon
                         className={cn(
                           "w-5 h-5 text-muted-foreground",
@@ -86,8 +86,8 @@ export default function AppSidebar() {
                         )}
                       />
                       <span>{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
+                    </SidebarMenuButton>
+                  </Link>
                 </SidebarMenuItem>
               );
             })}
@@ -99,6 +99,7 @@ export default function AppSidebar() {
         {/* Add optional footer content here */}
         <Button
           variant={"ghost"}
+          size={"sm"}
           onClick={logout}
           className="w-full text-left justify-start text-muted-foreground hover:text-white"
         >

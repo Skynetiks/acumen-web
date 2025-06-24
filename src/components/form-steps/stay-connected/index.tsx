@@ -38,7 +38,7 @@ export function StayConnectedStep(props: FormStepProps<StayConnectedData>) {
         name="hearAboutUs"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm font-medium text-gray-700">
+            <FormLabel className="text-sm font-medium">
               Where did you hear about us?
             </FormLabel>
 
