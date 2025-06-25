@@ -16,9 +16,6 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
   },
-  server: {
-    allowedHosts: ["asp-delicate-doe.ngrok-free.app"],
-  },
   resolve: {
     alias: {
       "@": resolve(__dirname, "./src"),
