@@ -37,10 +37,10 @@ export function FormRenderer({
   if (isCompleted && config.successComponent) {
     const FormSuccess = config.successComponent;
     return (
-      <PageWrapper className="justify-center">
+      <PageWrapper className="justify-center bg-gray-100">
         <Card
           className={cn(
-            "w-full h-full border-none md:border shadow-none",
+            "w-full h-full border-none md:border shadow-none md:shadow-lg",
             className
           )}
         >
@@ -61,12 +61,12 @@ export function FormRenderer({
     <PageWrapper className="bg-gray-100 justify-center">
       <Card
         className={cn(
-          "w-full h-screen shadow-none md:shadow-lg border-none md:border",
+          "w-full h-[100dvh] shadow-none md:shadow-lg border-none md:border",
           className
         )}
       >
-        <CardContent className="px-8 h-full flex flex-col gap-4 justify-between">
-          <div className="shrink-0 h-[20%]">
+        <CardContent className="px-8 h-full flex flex-col gap-4 justify-between w-full">
+          <div className=" h-[20%]">
             {config.showProgress !== false && (
               <FormHeader
                 title={currentStepConfig.title}
@@ -82,7 +82,7 @@ export function FormRenderer({
               />
             )}
           </div>
-          <div className="grow h-[80%]">
+          <div className="h-[80%] w-full">
             {!hasHydrated ? (
               <Loader size={16} className="animate-spin" />
             ) : (

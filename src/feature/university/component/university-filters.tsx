@@ -33,7 +33,7 @@ export function UniversitySearchAndFilter() {
             placeholder="Search..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="pl-10 border-none"
+            className="pl-10 border-none  shadow-none "
           />
         </div>
         <UniversityFilterModal />

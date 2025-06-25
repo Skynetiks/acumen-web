@@ -16,9 +16,9 @@ export const Route = createFileRoute("/_authenticated/_app")({
 function App() {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-[100dvh] w-full">
         <AppSidebar />
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col w-full min-w-0">
           <SidebarInset>
             <Outlet />
           </SidebarInset>

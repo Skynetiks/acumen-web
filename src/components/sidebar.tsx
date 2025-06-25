@@ -9,6 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboard,
@@ -25,6 +26,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/lib/providers/auth-context";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import { useMediaQuery } from "@uidotdev/usehooks";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
@@ -39,6 +41,8 @@ const menuItems = [
 export default function AppSidebar() {
   const { logout } = useAuth();
   const router = useRouterState();
+  const toggleSidebar = useSidebar().toggleSidebar;
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   return (
     <Sidebar
       side="left"
@@ -70,7 +74,10 @@ export default function AppSidebar() {
                   key={item.to}
                   className={cn("text-sm p-1 rounded-md")}
                 >
-                  <Link to={item.to} className=" ">
+                  <Link
+                    to={item.to}
+                    onClick={!isDesktop ? toggleSidebar : undefined}
+                  >
                     <SidebarMenuButton
                       className={cn(
                         "text-md py-4 flex items-center gap-3 p-3 cursor-pointer",

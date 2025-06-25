@@ -8,7 +8,12 @@ type PageProps = {
 
 function Page({ children, className }: PageProps) {
   return (
-    <main className={cn("min-h-screen h-full w-full grid", className)}>
+    <main
+      className={cn(
+        "min-h-[100dvh] h-full w-full min-w-0 flex flex-col",
+        className
+      )}
+    >
       {children}
     </main>
   );

@@ -17,7 +17,7 @@ export function EventSearchAndFilter() {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary" />
           <Input
             placeholder="Search..."
-            className="pl-12 border-0 bg-gray-50 rounded-full h-12 text-base placeholder:text-gray-400"
+            className="pl-12 shadow-none border-none"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />

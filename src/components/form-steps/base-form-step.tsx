@@ -30,16 +30,16 @@ export function BaseFormStep<T extends FieldValues>({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="h-full min-h-0 flex flex-col justify-between gap-4"
+        className="h-full min-h-0 w-full flex flex-col justify-between gap-4 overflow-x-hidden"
       >
-        <div className=" md:h-[88%] overflow-y-auto flex flex-col gap-8">
+        <div className=" md:h-[88%] overflow-y-auto flex flex-col w-full gap-6">
           {children}
         </div>
 
         <div className="md:h-[12%] justify-self-end flex justify-end items-center gap-4">
           <Button
             type="submit"
-            className={`w-full md:w-max py-3`}
+            className={`w-full md:w-max py-3 h-12 md:h-auto`}
             disabled={isLoading}
           >
             {isLoading ? (
