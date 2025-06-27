@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Drawer,
   DrawerContent,
@@ -41,7 +39,7 @@ export function ResponsiveFilterWrapper({
   );
 
   const ActionButtons = (
-    <div className="flex gap-4 pt-4 px-6 md:justify-end">
+    <div className="flex gap-4 px-6 py-4 border-t bg-background">
       <div className="flex-1 flex items-center justify-center">
         <Button
           type="reset"
@@ -71,20 +69,18 @@ export function ResponsiveFilterWrapper({
     </div>
   );
 
-  const Content = (
-    <>
-      <div className="px-6 pb-6 overflow-y-auto">{children}</div>
-      {ActionButtons}
-    </>
-  );
-
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>{TriggerButton}</DialogTrigger>
         <DialogContent className="max-w-xl p-4 py-8 border-0 rounded-2xl">
           <DialogTitle>{modalTitle || "Filters"}</DialogTitle>
-          <div className="py-4">{Content}</div>
+          <div className="py-4">
+            <div className="px-6 pb-6 overflow-y-auto max-h-[60vh]">
+              {children}
+            </div>
+            {ActionButtons}
+          </div>
         </DialogContent>
       </Dialog>
     );
@@ -93,9 +89,17 @@ export function ResponsiveFilterWrapper({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{TriggerButton}</DrawerTrigger>
-      <DrawerContent className="!max-h-[90vh] rounded-t-3xl border-0 p-4">
-        <DrawerTitle className="pb-4">{modalTitle || "Filters"}</DrawerTitle>
-        <div className="py-4">{Content}</div>
+      <DrawerContent className="!max-h-[90vh] rounded-t-3xl border-0">
+        <div className="px-6 py-4 border-b">
+          <DrawerTitle>{modalTitle || "Filters"}</DrawerTitle>
+        </div>
+        <div
+          className="px-6 py-4 overflow-y-auto"
+          style={{ maxHeight: "calc(90dvh - 200px)" }}
+        >
+          {children}
+        </div>
+        {ActionButtons}
       </DrawerContent>
     </Drawer>
   );
