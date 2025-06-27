@@ -97,7 +97,7 @@ export function PriceGraphSlider({
   return (
     <div className="relative w-full px-2 pb-4">
       {/* Bar graph */}
-      <div className="absolute left-2 right-2 top-0 h-20 flex items-end pointer-events-none">
+      <div className="absolute left-2 right-2 top-0 h-[54px] flex items-end pointer-events-none">
         {distribution?.map(({ count }, i) => {
           const heightPercent = (count / maxCount) * 100;
 
@@ -117,7 +117,7 @@ export function PriceGraphSlider({
       </div>
 
       {/* Slider */}
-      <div className="relative gap-[2px] -20 pt-20">
+      <div className="relative gap-[2px] -20 pt-[52px]">
         <CustomSliderWithIconThumb
           value={value}
           onValueChange={(val) => onChange([val[0], val[1]])}

@@ -39,7 +39,7 @@ export function ResponsiveFilterWrapper({
   );
 
   const ActionButtons = (
-    <div className="flex gap-4 px-6 py-4 border-t bg-background">
+    <div className="flex gap-4 px-6 bg-background">
       <div className="flex-1 flex items-center justify-center">
         <Button
           type="reset"
@@ -73,13 +73,15 @@ export function ResponsiveFilterWrapper({
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>{TriggerButton}</DialogTrigger>
-        <DialogContent className="max-w-xl p-4 py-8 border-0 rounded-2xl">
-          <DialogTitle>{modalTitle || "Filters"}</DialogTitle>
-          <div className="py-4">
-            <div className="px-6 pb-6 overflow-y-auto max-h-[60vh]">
+        <DialogContent className="max-w-xl p-4 py-8 border-0 rounded-2xl max-h-[90dvh] flex flex-col">
+          <DialogTitle className="shrink-0">
+            {modalTitle || "Filters"}
+          </DialogTitle>
+          <div className="flex-1 flex flex-col pt-6 py-2 gap-6 min-h-0">
+            <div className="flex-1 px-6 overflow-y-auto min-h-0">
               {children}
             </div>
-            {ActionButtons}
+            <div className="shrink-0">{ActionButtons}</div>
           </div>
         </DialogContent>
       </Dialog>
@@ -89,17 +91,17 @@ export function ResponsiveFilterWrapper({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{TriggerButton}</DrawerTrigger>
-      <DrawerContent className="!max-h-[90vh] rounded-t-3xl border-0">
-        <div className="px-6 py-4 border-b">
+      <DrawerContent className="!max-h-[90vh] rounded-t-full border-0">
+        <div className="px-6">
           <DrawerTitle>{modalTitle || "Filters"}</DrawerTitle>
         </div>
         <div
-          className="px-6 py-4 overflow-y-auto"
+          className="px-6 pt-8 py-4 overflow-y-auto"
           style={{ maxHeight: "calc(90dvh - 200px)" }}
         >
           {children}
         </div>
-        {ActionButtons}
+        <div className="py-4">{ActionButtons}</div>
       </DrawerContent>
     </Drawer>
   );

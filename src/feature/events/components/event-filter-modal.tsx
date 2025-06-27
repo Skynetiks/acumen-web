@@ -31,23 +31,23 @@ export default function EventFilterDrawer() {
   });
   const [timeDate, setTimeDate] = useQueryState(
     "timeDate",
-    parseAsString.withDefault("tomorrow"),
+    parseAsString.withDefault("tomorrow")
   );
   const [eventType, setEventType] = useQueryState<EventTypeType>(
     "eventType",
-    parseAsStringEnum(["online", "offline"]).withDefault("offline"),
+    parseAsStringEnum(["online", "offline"]).withDefault("offline")
   );
   const [location, setLocation] = useQueryState(
     "location",
-    parseAsString.withDefault("New Delhi"),
+    parseAsString.withDefault("New Delhi")
   );
   const [priceMin, setPriceMin] = useQueryState(
     "priceMin",
-    parseAsInteger.withDefault(10),
+    parseAsInteger.withDefault(10)
   );
   const [priceMax, setPriceMax] = useQueryState(
     "priceMax",
-    parseAsInteger.withDefault(200),
+    parseAsInteger.withDefault(200)
   );
 
   const form = useForm<EventFiltersType>({
@@ -85,12 +85,12 @@ export default function EventFilterDrawer() {
   const parsedDate = isDateSelected ? new Date(selectedValue) : undefined;
   const formId = "event-filter-form";
   return (
-    <ResponsiveFilterWrapper
-      formId={formId}
-    >
-      <Form {...form}
-      >
-        <form id={formId} className="space-y-8" noValidate
+    <ResponsiveFilterWrapper formId={formId}>
+      <Form {...form}>
+        <form
+          id={formId}
+          className="space-y-8"
+          noValidate
           onSubmit={form.handleSubmit(handleSubmit)}
           onReset={handleReset}
         >
@@ -110,10 +110,11 @@ export default function EventFilterDrawer() {
                             key={value}
                             type="button"
                             variant="default"
-                            className={`rounded-full px-4 font-medium border ${field.value === value
-                              ? "bg-primary text-white"
-                              : "bg-transparent border-gray-200 text-gray-600 hover:text-white"
-                              }`}
+                            className={`rounded-full px-4 font-medium border ${
+                              field.value === value
+                                ? "bg-primary text-white"
+                                : "bg-transparent border-gray-200 text-gray-600 hover:text-white"
+                            }`}
                             onClick={() => field.onChange(value)}
                           >
                             {value
@@ -122,13 +123,13 @@ export default function EventFilterDrawer() {
                           </Button>
                         ))}
                       </div>
-                      <div className="max-w-max">
+                      <div className="max-w-max rounded-xl p-1 border border-input">
                         <DatePicker
                           value={parsedDate}
                           triggerText="Choose from Calendar"
                           triggerClassName={cn(
                             "border-none text-primary font-medium",
-                            parsedDate ? "bg-primary text-white" : "bg-[unset]",
+                            parsedDate ? "bg-primary text-white" : "bg-[unset]"
                           )}
                           onChange={(date) => {
                             if (date) field.onChange(date.toISOString());
@@ -157,10 +158,11 @@ export default function EventFilterDrawer() {
                           key={value}
                           type="button"
                           variant="default"
-                          className={`rounded-full px-8 font-medium border ${field.value === value
-                            ? "bg-primary text-white"
-                            : "bg-transparent border-gray-200 text-gray-600 hover:text-white"
-                            }`}
+                          className={`rounded-full px-8 font-medium border ${
+                            field.value === value
+                              ? "bg-primary text-white"
+                              : "bg-transparent border-gray-200 text-gray-600 hover:text-white"
+                          }`}
                           onClick={() => field.onChange(value)}
                         >
                           {value[0].toUpperCase() + value.slice(1)}
@@ -176,7 +178,7 @@ export default function EventFilterDrawer() {
           {/* Location */}
           <div>
             <h3 className="font-semibold mb-4">Location</h3>
-            <div className="max-w-max flex items-center gap-4 rounded-2xl cursor-pointer select-none">
+            <div className=" flex items-center gap-4 rounded-2xl border border-input p-2 w-full cursor-pointer select-none">
               <div className="h-12 w-12 bg-primary/10 rounded-xl flex items-center justify-center">
                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
                   <MapPin className="w-5 h-5 text-primary" />
@@ -191,10 +193,10 @@ export default function EventFilterDrawer() {
           <div>
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-semibold text-[17px]">Select price range</h3>
-              <span className="text-primary font-semibold text-[17px]">
+              {/* <span className="text-primary font-semibold text-[17px]">
                 ${form.watch("priceRange").min} - $
                 {form.watch("priceRange").max}
-              </span>
+              </span> */}
             </div>
             <FormField
               control={form.control}
@@ -206,13 +208,16 @@ export default function EventFilterDrawer() {
                       <PriceGraphSlider
                         value={[field.value.min, field.value.max]}
                         onChange={(val) => {
-                          return form.setValue("priceRange", { min: val[0], max: val[1] }, {
-                            shouldDirty: true,
-                            shouldTouch: true,
-                            shouldValidate: false,
-                          })
-                        }
-                        }
+                          return form.setValue(
+                            "priceRange",
+                            { min: val[0], max: val[1] },
+                            {
+                              shouldDirty: true,
+                              shouldTouch: true,
+                              shouldValidate: false,
+                            }
+                          );
+                        }}
                         max={200}
                         min={10}
                         step={10}
