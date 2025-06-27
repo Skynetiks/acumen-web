@@ -1,5 +1,3 @@
-"use client";
-
 import { Card, CardContent } from "@/components/ui/card";
 import { FormHeader } from "./form-header";
 import { useForm } from "@/hooks/use-form";
@@ -40,7 +38,7 @@ export function FormRenderer({
       <PageWrapper className="justify-center bg-gray-100">
         <Card
           className={cn(
-            "w-full h-full border-none md:border shadow-none md:shadow-lg",
+            "w-full h-[100dvh] border-none md:border shadow-none md:shadow-lg",
             className
           )}
         >
@@ -57,6 +55,7 @@ export function FormRenderer({
 
   const StepComponent = currentStepConfig.component;
 
+
   return (
     <PageWrapper className="bg-gray-100 justify-center">
       <Card
@@ -65,9 +64,10 @@ export function FormRenderer({
           className
         )}
       >
-        <CardContent className="px-8 h-full flex flex-col gap-4 justify-between w-full">
-          <div className=" h-[20%]">
-            {config.showProgress !== false && (
+        <CardContent className="px-8 h-full flex flex-col gap-4 w-full overflow-hidden">
+          {/* Header */}
+          {config.showProgress !== false && (
+            <div className="shrink-0">
               <FormHeader
                 title={currentStepConfig.title}
                 subtitle={currentStepConfig.subtitle}
@@ -80,11 +80,15 @@ export function FormRenderer({
                 }
                 progress={progress}
               />
-            )}
-          </div>
-          <div className="h-[80%] w-full">
+            </div>
+          )}
+
+          {/* Step content */}
+          <div className="grow overflow-auto w-full">
             {!hasHydrated ? (
-              <Loader size={16} className="animate-spin" />
+              <div className="flex justify-center items-center h-full">
+                <Loader size={16} className="animate-spin" />
+              </div>
             ) : (
               <StepComponent
                 data={currentStepData}

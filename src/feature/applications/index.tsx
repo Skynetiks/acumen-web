@@ -49,9 +49,9 @@ export default function ApplicationsPage({ params }: { params: ParamsType }) {
             params={{ applicationId: application.id }}
             key={application.id}
           >
-            <div className="border border-primary rounded-lg p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+            <div className="border border-primary rounded-lg p-4 flex items-start justify-between hover:bg-gray-50 transition-colors">
               <div className="flex items-start space-x-3">
-                <div className="pt-1 flex items-start h-full justify-start">
+                <div className="pt-1 shrink-0 flex items-start h-full justify-start">
                   <svg
                     width="20"
                     height="20"
@@ -65,23 +65,23 @@ export default function ApplicationsPage({ params }: { params: ParamsType }) {
                     />
                   </svg>
                 </div>
-                <div>
-                  <h3 className="font-medium text-primary">
+                <div className="grow ">
+                  <h3 className="font-medium text-sm text-primary">
                     {application.name}
                   </h3>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-muted-foreground text-xs">
                     {application.program} ({application.degree})
                   </p>
                 </div>
               </div>
-              <div className="flex items-center space-x-3">
-                <span className="text-sm text-muted-foreground">
-                  {application.date}
-                </span>
+              <div className="shrink-0 flex flex-col justify-start item-end">
                 <ChevronRight
-                  className="h-5 w-5 text-primary"
+                  className="h-5 w-5 text-primary self-end"
                   strokeWidth={4}
                 />
+                <span className="text-xs text-muted-foreground">
+                  {application.date}
+                </span>
               </div>
             </div>
           </Link>

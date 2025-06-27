@@ -29,15 +29,15 @@ const defaultValues: UniversityParamsType = {
 export function UniversityFilterModal() {
   const [courseName, setCourseName] = useQueryState(
     "courseName",
-    parseAsString.withDefault("")
+    parseAsString.withDefault(""),
   );
   const [universityType, setUniversityType] = useQueryState(
     "universityType",
-    parseAsString.withDefault("")
+    parseAsString.withDefault(""),
   );
   const [beginsAt, setBeginsAt] = useQueryState(
     "beginsAt",
-    parseAsString.withDefault("September 2025")
+    parseAsString.withDefault("September 2025"),
   );
 
   const form = useForm<UniversityParamsType>({
@@ -65,8 +65,6 @@ export function UniversityFilterModal() {
   return (
     <ResponsiveFilterWrapper
       formId="university-filter-form"
-      onSubmit={form.handleSubmit(handleSubmit)}
-      onReset={handleReset}
     >
       <Form {...form}>
         <form

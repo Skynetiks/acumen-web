@@ -53,8 +53,18 @@ export default function LoginScreen() {
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      console.log(data);
-      login("Test User");
+      const result = await login({
+        type: "phone",
+        data: {
+          phone: data.phone,
+        },
+      });
+
+      if (!result.success) {
+        alert(result.message); // or toast
+        return;
+      }
+
       navigate({ to: "/onboarding" });
     } catch (error) {
       console.error("Login error:", error);
@@ -79,7 +89,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <Card className="justify-self-center justify-center w-full rounded-lg max-w-md border-none shadow-none">
+    <Card className="justify-self-center justify-center w-full rounded-lg md:max-w-md border-none shadow-none">
       <div className="p-6 pb-0">
         <Logo />
       </div>

@@ -34,11 +34,16 @@ export function PersonalDetailsStep(props: FormStepProps<PersonalDetailsData>) {
           ? new Date(data.dateOfBirth)
           : undefined,
     },
+    shouldUnregister: true,
     mode: "onChange",
   });
 
   useEffect(() => {
-    if (data && Object.keys(data).length > 0) {
+    const shouldHydrate = data && Object.keys(data).length > 0;
+
+    if (!shouldHydrate) return;
+
+    const timeout = setTimeout(() => {
       form.reset({
         ...data,
         dateOfBirth:
@@ -46,8 +51,12 @@ export function PersonalDetailsStep(props: FormStepProps<PersonalDetailsData>) {
             ? new Date(data.dateOfBirth)
             : undefined,
       });
-    }
+    }, 0); // delay reset until inputs are mounted
+
+    return () => clearTimeout(timeout); // cleanup
   }, [data]);
+
+
 
   return (
     <BaseFormStep {...props} form={form}>

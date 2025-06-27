@@ -7,6 +7,7 @@ export const eventSchema = z.object({
   date: z.string(),
   location: z.string(),
   image: z.string(),
+  price: z.number(),
 });
 
 export const eventsSchema = z.array(eventSchema);

@@ -1,5 +1,5 @@
-"use client";
 
+import cuid from "cuid";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Logo from "@/components/logo";
+import { useNavigate } from "@tanstack/react-router";
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 const signupSchema = z
   .object({
@@ -25,7 +26,8 @@ const signupSchema = z
     email: z.string().email("Please enter a valid email address"),
     mobile: z
       .string()
-      .min(10, "Mobile number must be at least 10 digits")
+      .min(6, "Phone number is too short")
+      .max(15, "Phone number is too long")
       .regex(/^\d+$/, "Mobile number must contain only digits"),
     password: z
       .string()
@@ -50,6 +52,8 @@ const signupSchema = z
 type SignupFormData = z.infer<typeof signupSchema>;
 
 export default function SignupScreen() {
+
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -71,20 +75,35 @@ export default function SignupScreen() {
       confirmPassword: "",
       agreeToTerms: false,
     },
+    mode: "onChange"
   });
 
   const agreeToTerms = watch("agreeToTerms");
 
+
+
   const onSubmit = async (data: SignupFormData) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      console.log("Signup data:", data);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      // Handle successful registration here
-      alert(
-        "Registration successful! Please check your email for verification."
-      );
+      const userId = cuid();
+
+      const newUser = {
+        userId,
+        email: data.email,
+        phone: data.mobile,
+        password: data.password, // ⚠️ consider hashing or removing this in production
+      };
+
+      const existingUsersString = localStorage.getItem("form-storage-users");
+      const existingUsers = existingUsersString
+        ? (JSON.parse(existingUsersString) as typeof newUser[])
+        : [];
+
+      const updatedUsers = [...existingUsers, newUser];
+
+      localStorage.setItem("form-storage-users", JSON.stringify(updatedUsers));
+
+      navigate({ to: "/onboarding" });
     } catch (error) {
       console.error("Signup error:", error);
       alert("Registration failed. Please try again.");
@@ -93,8 +112,9 @@ export default function SignupScreen() {
     }
   };
 
+
   return (
-    <Card className="justify-self-center justify-center w-full rounded-lg max-w-sm border-none shadow-none">
+    <Card className="justify-self-center justify-center w-full md:max-w-md rounded-lg border-none shadow-none">
       <div className="p-6 pb-0">
         <Logo />
       </div>
@@ -152,6 +172,7 @@ export default function SignupScreen() {
             <Input
               {...register("mobile")}
               id="mobile"
+              type="number"
               placeholder="Mobile number"
               disabled={isLoading}
             />

@@ -19,7 +19,7 @@ export function UniversityDetail({ university }: { university: University }) {
   return (
     <PageWrapper>
       <PageHeader>
-        <div className="flex items-center justify-between p-4">
+        <div className="flex items-center justify-start gap-10 p-4">
           <NavigateBackArrowProps to={"/university"} />
           <h1 className="text-lg font-semibold text-gray-900">
             {university.name}
@@ -32,7 +32,7 @@ export function UniversityDetail({ university }: { university: University }) {
       <div className="relative">
         <div className="h-48 bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center">
           <img
-            src={university.banner || "/placeholder.svg"}
+            src={university.banner || "/assets/university-info.png"}
             alt={`${university.name} banner`}
             width={400}
             height={200}
@@ -41,57 +41,66 @@ export function UniversityDetail({ university }: { university: University }) {
         </div>
 
         {/* University Logo */}
-        <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2">
-          <div className="w-20 h-20 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center">
+        <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
+          <div className="w-24 h-24 bg-white rounded-lg  border-4 border-white shadow-lg flex items-center justify-center">
             <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
-              <Building className="w-8 h-8 text-white" />
+              <img
+                src={university.logo || "/assets/university-logo.png"}
+                alt={`${university.name} banner`}
+                width={16}
+                height={16}
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
         </div>
       </div>
-      <Card className="bg-white shadow-sm">
-        <CardContent className="p-0 flex flex-col gap-4 justify-center items-center">
-          <div className="flex items-center space-x-3">
-            <Home className="h-5 w-5 text-primary" />
-            <span className="text-secondary-foreground">{university.name}</span>
-          </div>
-          <span className="text-primary font-medium">
-            {university.description}
-          </span>
-          <Button className="max-w-max py-3" asChild>
-            <Link
-              to="/university/$universityId/apply"
-              params={{ universityId: university.id }}
-            >
-              Apply Now
-            </Link>
-          </Button>
-        </CardContent>
-      </Card>
+      <div className="p-4 pt-12">
+
+        <Card className=" shadow-lg border-none">
+          <CardContent className="p-0 flex flex-col gap-2 justify-center items-center">
+            <div className="flex items-center space-x-3">
+              {/* <Home className="h-5 w-5 text-primary" /> */}
+              <span className="font-semibold text-lg">{university.name}</span>
+            </div>
+            <span className="text-muted-foreground font-medium md:max-w-md text-center">
+              {university.description}
+            </span>
+            <Button className="max-w-max py-3" asChild>
+              <Link
+                to="/university/$universityId/apply"
+                params={{ universityId: university.id }}
+              >
+                Apply Now
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Content */}
-      <div className="pt-12 p-4">
+      <div className="p-4">
         {/* About Section */}
-        <Card className="bg-white shadow-sm">
+        <Card className=" shadow-none border-none">
           <CardContent className="p-0">
             {/* Section Header */}
-            <div className="p-4 border-b">
+            <div className="p-4">
               <h2 className="text-lg font-semibold text-primary border-b-2 border-pink-500 pb-1 inline-block">
                 About
               </h2>
             </div>
 
             {/* Details List */}
-            <div className="divide-y divide-gray-100">
+            <div className="bg-muted pt-2 rounded-lg">
               {/* Pre-arrival Admission */}
-              <div className="flex items-center justify-between p-4 bg-gray-50">
+              <div className="flex items-center justify-between p-4">
                 <div className="flex items-center space-x-3">
                   <Home className="h-5 w-5 text-primary" />
                   <span className="text-secondary-foreground">
                     Pre-arrival Admission :
                   </span>
                 </div>
-                <span className="text-primary font-medium">
+                <span className="text-primary font-medium capitalize">
                   {university.prearrivalAdmission}
                 </span>
               </div>
@@ -110,7 +119,7 @@ export function UniversityDetail({ university }: { university: University }) {
               </div>
 
               {/* Medium of Instructions */}
-              <div className="flex items-center justify-between p-4 bg-gray-50">
+              <div className="flex items-center justify-between p-4">
                 <div className="flex items-center space-x-3">
                   <Globe className="h-5 w-5 text-primary" />
                   <span className="text-secondary-foreground">
@@ -136,7 +145,7 @@ export function UniversityDetail({ university }: { university: University }) {
               </div>
 
               {/* Begins at */}
-              <div className="flex items-center justify-between p-4 bg-gray-50">
+              <div className="flex items-center justify-between p-4">
                 <div className="flex items-center space-x-3">
                   <Calendar className="h-5 w-5 text-primary" />
                   <span className="text-secondary-foreground">Begins at:</span>
@@ -158,7 +167,7 @@ export function UniversityDetail({ university }: { university: University }) {
               </div>
 
               {/* Subcategory */}
-              <div className="flex items-center justify-between p-4 bg-gray-50">
+              <div className="flex items-center justify-between p-4">
                 <div className="flex items-center space-x-3">
                   <MapPin className="h-5 w-5 text-primary" />
                   <span className="text-secondary-foreground">

@@ -12,7 +12,10 @@ export const Route = createFileRoute(
   errorComponent: (error) => (
     <ErrorComponent title={error.error.name} error={error.error} />
   ),
-  loader: applyUserDataLoader,
+  loader: ({ context }) => {
+    applyUserDataLoader(context.authentication.user?.userId!)
+  }
+  ,
 });
 
 function RouteComponent() {

@@ -1,8 +1,6 @@
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { MapPin, ChevronRight } from "lucide-react";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Slider } from "@/components/ui/slider";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -21,27 +19,35 @@ import {
 import { DatePicker } from "@/components/ui/date-picker";
 import { cn } from "@/lib/utils";
 import { ResponsiveFilterWrapper } from "@/components/filter-wrapper";
+import { PriceGraphSlider } from "@/components/ui/slider-with-graph";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { EventFiltersQueryKey } from "../data/constants";
+import { getEventPriceDistribution } from "../data/api";
 
 export default function EventFilterDrawer() {
+  const { data: priceDistribution } = useSuspenseQuery({
+    queryKey: EventFiltersQueryKey,
+    queryFn: () => getEventPriceDistribution(),
+  });
   const [timeDate, setTimeDate] = useQueryState(
     "timeDate",
-    parseAsString.withDefault("tomorrow")
+    parseAsString.withDefault("tomorrow"),
   );
   const [eventType, setEventType] = useQueryState<EventTypeType>(
     "eventType",
-    parseAsStringEnum(["online", "offline"]).withDefault("offline")
+    parseAsStringEnum(["online", "offline"]).withDefault("offline"),
   );
   const [location, setLocation] = useQueryState(
     "location",
-    parseAsString.withDefault("New Delhi")
+    parseAsString.withDefault("New Delhi"),
   );
   const [priceMin, setPriceMin] = useQueryState(
     "priceMin",
-    parseAsInteger.withDefault(10)
+    parseAsInteger.withDefault(10),
   );
   const [priceMax, setPriceMax] = useQueryState(
     "priceMax",
-    parseAsInteger.withDefault(200)
+    parseAsInteger.withDefault(200),
   );
 
   const form = useForm<EventFiltersType>({
@@ -54,16 +60,8 @@ export default function EventFilterDrawer() {
     },
   });
 
-  useEffect(() => {
-    form.reset({
-      timeDate,
-      eventType,
-      location,
-      priceRange: { min: priceMin, max: priceMax },
-    });
-  }, [timeDate, eventType, location, priceMin, priceMax, form]);
-
-  const onSubmit = (data: EventFiltersType) => {
+  const handleSubmit = (data: EventFiltersType) => {
+    console.log(data);
     setTimeDate(data.timeDate || "");
     setEventType(data.eventType || "offline");
     setLocation(data.location || "");
@@ -88,12 +86,14 @@ export default function EventFilterDrawer() {
   const formId = "event-filter-form";
   return (
     <ResponsiveFilterWrapper
-      onReset={handleReset}
-      onSubmit={form.handleSubmit(onSubmit)}
       formId={formId}
     >
-      <Form {...form}>
-        <form id={formId} className="space-y-8" noValidate>
+      <Form {...form}
+      >
+        <form id={formId} className="space-y-8" noValidate
+          onSubmit={form.handleSubmit(handleSubmit)}
+          onReset={handleReset}
+        >
           {/* Time & Date */}
           <div>
             <h3 className="font-semibold mb-4 text-[17px]">Time & Date</h3>
@@ -110,11 +110,10 @@ export default function EventFilterDrawer() {
                             key={value}
                             type="button"
                             variant="default"
-                            className={`rounded-full px-6 font-medium border ${
-                              field.value === value
-                                ? "bg-primary text-white"
-                                : "bg-transparent border-gray-200 text-gray-600 hover:text-white"
-                            }`}
+                            className={`rounded-full px-4 font-medium border ${field.value === value
+                              ? "bg-primary text-white"
+                              : "bg-transparent border-gray-200 text-gray-600 hover:text-white"
+                              }`}
                             onClick={() => field.onChange(value)}
                           >
                             {value
@@ -129,7 +128,7 @@ export default function EventFilterDrawer() {
                           triggerText="Choose from Calendar"
                           triggerClassName={cn(
                             "border-none text-primary font-medium",
-                            parsedDate ? "bg-primary text-white" : "bg-[unset]"
+                            parsedDate ? "bg-primary text-white" : "bg-[unset]",
                           )}
                           onChange={(date) => {
                             if (date) field.onChange(date.toISOString());
@@ -158,11 +157,10 @@ export default function EventFilterDrawer() {
                           key={value}
                           type="button"
                           variant="default"
-                          className={`rounded-full px-8 font-medium border ${
-                            field.value === value
-                              ? "bg-primary text-white"
-                              : "bg-transparent border-gray-200 text-gray-600 hover:text-white"
-                          }`}
+                          className={`rounded-full px-8 font-medium border ${field.value === value
+                            ? "bg-primary text-white"
+                            : "bg-transparent border-gray-200 text-gray-600 hover:text-white"
+                            }`}
                           onClick={() => field.onChange(value)}
                         >
                           {value[0].toUpperCase() + value.slice(1)}
@@ -194,8 +192,8 @@ export default function EventFilterDrawer() {
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-semibold text-[17px]">Select price range</h3>
               <span className="text-primary font-semibold text-[17px]">
-                ${form.watch("priceRange.min")} - $
-                {form.watch("priceRange.max")}
+                ${form.watch("priceRange").min} - $
+                {form.watch("priceRange").max}
               </span>
             </div>
             <FormField
@@ -205,15 +203,20 @@ export default function EventFilterDrawer() {
                 <FormItem>
                   <FormControl>
                     <div className="px-2">
-                      <Slider
+                      <PriceGraphSlider
                         value={[field.value.min, field.value.max]}
-                        onValueChange={(value) =>
-                          field.onChange({ min: value[0], max: value[1] })
+                        onChange={(val) => {
+                          return form.setValue("priceRange", { min: val[0], max: val[1] }, {
+                            shouldDirty: true,
+                            shouldTouch: true,
+                            shouldValidate: false,
+                          })
+                        }
                         }
                         max={200}
-                        min={0}
+                        min={10}
                         step={10}
-                        className="w-full"
+                        distribution={priceDistribution}
                       />
                     </div>
                   </FormControl>

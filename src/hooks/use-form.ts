@@ -1,14 +1,20 @@
-"use client";
 
 import { useEffect, useMemo } from "react";
 import type { FormConfig } from "@/types/form.types";
 import { createFormStore } from "@/lib/form-store.factory";
 import { queryClient } from "@/lib/queryClient";
+import { useAuth } from "@/lib/providers/auth-context";
+import { useNavigate } from "@tanstack/react-router";
 
 // Custom hook for form management
 export function useForm(config: FormConfig, initialData?: Record<string, any>) {
+  const { user } = useAuth()
+  const navigate = useNavigate()
+  if (!user || Object.keys(user).length === 0) {
+    navigate({ to: "/auth/login" })
+  }
   // Create store instance with useMemo to prevent recreation
-  const useStore = useMemo(() => createFormStore(config), [config]);
+  const useStore = useMemo(() => createFormStore(config, user!), [config, user]);
   const store = useStore();
 
   // Populate form with initial data only once

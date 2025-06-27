@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { FormStore, FormConfig, FormState } from "@/types/form.types";
+import type { StoredUser } from "./providers/auth-context";
 
 // Factory function to create form stores
-export function createFormStore(config: FormConfig) {
+export function createFormStore(config: FormConfig, user: StoredUser) {
   const initialState: FormState = {
     currentStep: 1,
     formData: config.initialData || {},
@@ -12,37 +13,37 @@ export function createFormStore(config: FormConfig) {
     isCompleted: false,
     metadata: {},
     _hasHydrated: false,
-    setHasHydrated: () => {},
+    setHasHydrated: () => { },
   };
 
   return create<FormStore>()(
     config.persistData
       ? persist(
-          (set, get) => {
-            const store = createFormActions(set, get, config, initialState);
-            return {
-              ...store,
-              _hasHydrated: false,
-              setHasHydrated: (value: boolean) => set({ _hasHydrated: value }),
-            };
+        (set, get) => {
+          const store = createFormActions(set, get, config, initialState);
+          return {
+            ...store,
+            _hasHydrated: false,
+            setHasHydrated: (value: boolean) => set({ _hasHydrated: value }),
+          };
+        },
+        {
+          name: `form-storage-${config.id}-${user.userId}`,
+          partialize: (state) => ({
+            isFormCompleted: state.isCompleted,
+            currentStep: state.currentStep,
+            formData: state.formData,
+            metadata: state.metadata,
+          }),
+          onRehydrateStorage: (state) => {
+            return () => state.setHasHydrated(true);
           },
-          {
-            name: `form-storage-${config.id}`,
-            partialize: (state) => ({
-              isFormCompleted: state.isCompleted,
-              currentStep: state.currentStep,
-              formData: state.formData,
-              metadata: state.metadata,
-            }),
-            onRehydrateStorage: (state) => {
-              return () => state.setHasHydrated(true);
-            },
-          }
-        )
+        }
+      )
       : (set, get) => ({
-          ...createFormActions(set, get, config, initialState),
-          _hasHydrated: true, // no persistence means instantly hydrated
-        })
+        ...createFormActions(set, get, config, initialState),
+        _hasHydrated: true, // no persistence means instantly hydrated
+      })
   );
 }
 

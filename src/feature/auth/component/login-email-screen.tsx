@@ -1,4 +1,3 @@
-"use client";
 
 import {
   Form,
@@ -46,17 +45,27 @@ export default function LoginScreenWithEmail() {
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      console.log(data);
-      login("Test User");
+      const result = await login({
+        type: "email",
+        data: {
+          email: data.email,
+          password: data.password
+        },
+      });
+
+      if (!result.success) {
+        alert(result.message); // or toast
+        return;
+      }
+
       navigate({ to: "/onboarding" });
-    } catch (err) {
-      console.error("Login failed:", err);
-      alert("Login failed. Please try again.");
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Failed to send OTP. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
-
   const handleSocialLogin = async (provider: string) => {
     setIsLoading(true);
     try {

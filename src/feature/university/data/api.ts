@@ -1,6 +1,6 @@
 import { type University } from "./schema";
 
-export const mockUniversities = [
+export const sampleUniversities = [
   {
     id: "1",
     name: "Harvard University",
@@ -352,6 +352,18 @@ export const mockUniversities = [
     beginsAt: "September 2025",
   },
 ] as const;
+
+export const mockUniversities = sampleUniversities.map((u) => ({
+  ...u,
+  logo: `/assets/university-logo.png`,
+  banner: `/assets/university-info.png`,
+  prearrivalAdmission: Math.random() > 0.5 ? "yes" : "no",
+  degreeType: "Undergraduate",
+  mediumOfInstructions: "English",
+  category: u.courseName.split(",")[0].trim(), // use first course as category
+  subcategory: u.courseName.split(",")[1]?.trim() ?? "", // second course if exists
+  description: `Explore top programs at ${u.name}, one of the world's leading universities.`,
+}));
 
 // pagination + filters
 export async function fetchUniversities({

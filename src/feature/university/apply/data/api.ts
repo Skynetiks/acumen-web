@@ -20,8 +20,8 @@ export const userSchema = z.object({
   documentUpload: documentUploadSchema,
 });
 
-export default function fetchUserData() {
-  const stored = localStorage.getItem("form-storage-onboarding");
+export default function fetchUserData(userId: string) {
+  const stored = localStorage.getItem(`form-storage-onboarding-${userId}`);
   if (!stored) return null;
   const data = JSON.parse(stored);
   const result: UniversityApplicationType = data.state.formData;

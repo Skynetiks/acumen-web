@@ -20,16 +20,12 @@ import { ListFilter } from "lucide-react";
 interface ResponsiveFilterWrapperProps {
   modalTitle?: string;
   children: ReactNode;
-  onReset?: () => void;
-  onSubmit?: () => void;
   formId?: string; // ✅ allow native form connection
 }
 
 export function ResponsiveFilterWrapper({
   modalTitle,
   children,
-  onReset,
-  onSubmit,
   formId,
 }: ResponsiveFilterWrapperProps) {
   const [open, setOpen] = useState(false);
@@ -54,7 +50,6 @@ export function ResponsiveFilterWrapper({
           className="rounded-full h-10 w-full border-gray-300 text-gray-600 font-semibold"
           onClick={() => {
             setOpen(false);
-            return onReset;
           }}
         >
           RESET
@@ -68,7 +63,6 @@ export function ResponsiveFilterWrapper({
           className="rounded-full w-full h-10"
           onClick={() => {
             setOpen(false);
-            return onSubmit;
           }}
         >
           APPLY

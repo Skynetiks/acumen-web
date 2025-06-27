@@ -69,8 +69,6 @@ export function ApplicationFilterModal() {
   return (
     <ResponsiveFilterWrapper
       formId="university-filter-form"
-      onSubmit={form.handleSubmit(handleSubmit)}
-      onReset={handleReset}
     >
       <span className="text-xs text-muted-foreground block pb-8">
         Note: I didn't have the applications filter so this is the dummy filter

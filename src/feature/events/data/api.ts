@@ -7,9 +7,40 @@ export const mockEvents: EventType[] = Array.from({ length: 50 }, (_, i) => ({
   date: new Date().toISOString(),
   location: "Bangalore",
   image: images[i % 2],
+  price: (Math.floor(Math.random() * 10) + 1) * 10,
 }));
 
 import { addDays, startOfWeek, endOfWeek } from "date-fns";
+
+//generate price distribution from price selector slider
+function generatePriceDistribution(
+  events: EventType[],
+  bucketSize = 10,
+  min = 0,
+  max = 200,
+) {
+  const bucketCount = (max - min) / bucketSize;
+
+  const distribution = Array.from({ length: bucketCount }, (_, i) => ({
+    range: [min + i * bucketSize, min + (i + 1) * bucketSize] as [
+      number,
+      number,
+    ],
+    count: 0,
+  }));
+
+  for (const event of events) {
+    const { price } = event;
+    if (price < min || price > max) continue;
+    const index = Math.min(
+      Math.floor((price - min) / bucketSize),
+      distribution.length - 1,
+    );
+    distribution[index].count += 1;
+  }
+
+  return distribution;
+}
 
 export function parseTimeDateFilter(value: string): {
   start: Date;
@@ -56,7 +87,7 @@ export async function fetchEvents({
       (event) =>
         event.title.toLowerCase().includes(search) ||
         event.location.toLowerCase().includes(search) ||
-        event.date.toLowerCase().includes(search)
+        event.date.toLowerCase().includes(search),
     );
   }
 
@@ -70,7 +101,7 @@ export async function fetchEvents({
     filtered = filtered.filter((event) =>
       event.location
         .toLowerCase()
-        .includes(filters.location?.toLowerCase() || "")
+        .includes(filters.location?.toLowerCase() || ""),
     );
   }
 
@@ -101,4 +132,8 @@ export async function fetchEvents({
 
 export async function fetchEventById(eventId: string) {
   return mockEvents.find((e) => String(e.id) === eventId);
+}
+export async function getEventPriceDistribution() {
+  const distribution = generatePriceDistribution(mockEvents);
+  return distribution;
 }
