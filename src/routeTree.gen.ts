@@ -11,15 +11,158 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated/route'
 import { Route as IndexImport } from './routes/index'
+import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/_app/route'
+import { Route as AuthAuthRouteImport } from './routes/_auth/auth/route'
+import { Route as AuthenticatedOnboardingIndexImport } from './routes/_authenticated/onboarding/index'
+import { Route as AuthAuthIndexImport } from './routes/_auth/auth/index'
+import { Route as AuthenticatedAppUniversityIndexImport } from './routes/_authenticated/_app/university/index'
+import { Route as AuthenticatedAppSettingsIndexImport } from './routes/_authenticated/_app/settings/index'
+import { Route as AuthenticatedAppNotificationIndexImport } from './routes/_authenticated/_app/notification/index'
+import { Route as AuthenticatedAppEventsIndexImport } from './routes/_authenticated/_app/events/index'
+import { Route as AuthenticatedAppDashboardIndexImport } from './routes/_authenticated/_app/dashboard/index'
+import { Route as AuthenticatedAppCollegeFinderIndexImport } from './routes/_authenticated/_app/college-finder/index'
+import { Route as AuthenticatedAppApplicationIndexImport } from './routes/_authenticated/_app/application/index'
+import { Route as AuthAuthSignupIndexImport } from './routes/_auth/auth/signup/index'
+import { Route as AuthAuthLoginIndexImport } from './routes/_auth/auth/login/index'
+import { Route as AuthAuthLoginEmailIndexImport } from './routes/_auth/auth/login-email/index'
+import { Route as AuthenticatedAppEventsEventIdImport } from './routes/_authenticated/_app/events/$eventId'
+import { Route as AuthenticatedAppApplicationApplicationIdImport } from './routes/_authenticated/_app/application/$applicationId'
+import { Route as AuthenticatedAppUniversityUniversityIdIndexImport } from './routes/_authenticated/_app/university/$universityId/index'
+import { Route as AuthenticatedAppUniversityUniversityIdApplyIndexImport } from './routes/_authenticated/_app/university/$universityId/apply/index'
 
 // Create/Update Routes
+
+const AuthenticatedRouteRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const AuthenticatedAppRouteRoute = AuthenticatedAppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+
+const AuthAuthRouteRoute = AuthAuthRouteImport.update({
+  id: '/_auth/auth',
+  path: '/auth',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthenticatedOnboardingIndexRoute =
+  AuthenticatedOnboardingIndexImport.update({
+    id: '/onboarding/',
+    path: '/onboarding/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+
+const AuthAuthIndexRoute = AuthAuthIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthAuthRouteRoute,
+} as any)
+
+const AuthenticatedAppUniversityIndexRoute =
+  AuthenticatedAppUniversityIndexImport.update({
+    id: '/university/',
+    path: '/university/',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+
+const AuthenticatedAppSettingsIndexRoute =
+  AuthenticatedAppSettingsIndexImport.update({
+    id: '/settings/',
+    path: '/settings/',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+
+const AuthenticatedAppNotificationIndexRoute =
+  AuthenticatedAppNotificationIndexImport.update({
+    id: '/notification/',
+    path: '/notification/',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+
+const AuthenticatedAppEventsIndexRoute =
+  AuthenticatedAppEventsIndexImport.update({
+    id: '/events/',
+    path: '/events/',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+
+const AuthenticatedAppDashboardIndexRoute =
+  AuthenticatedAppDashboardIndexImport.update({
+    id: '/dashboard/',
+    path: '/dashboard/',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+
+const AuthenticatedAppCollegeFinderIndexRoute =
+  AuthenticatedAppCollegeFinderIndexImport.update({
+    id: '/college-finder/',
+    path: '/college-finder/',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+
+const AuthenticatedAppApplicationIndexRoute =
+  AuthenticatedAppApplicationIndexImport.update({
+    id: '/application/',
+    path: '/application/',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+
+const AuthAuthSignupIndexRoute = AuthAuthSignupIndexImport.update({
+  id: '/signup/',
+  path: '/signup/',
+  getParentRoute: () => AuthAuthRouteRoute,
+} as any)
+
+const AuthAuthLoginIndexRoute = AuthAuthLoginIndexImport.update({
+  id: '/login/',
+  path: '/login/',
+  getParentRoute: () => AuthAuthRouteRoute,
+} as any)
+
+const AuthAuthLoginEmailIndexRoute = AuthAuthLoginEmailIndexImport.update({
+  id: '/login-email/',
+  path: '/login-email/',
+  getParentRoute: () => AuthAuthRouteRoute,
+} as any)
+
+const AuthenticatedAppEventsEventIdRoute =
+  AuthenticatedAppEventsEventIdImport.update({
+    id: '/events/$eventId',
+    path: '/events/$eventId',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+
+const AuthenticatedAppApplicationApplicationIdRoute =
+  AuthenticatedAppApplicationApplicationIdImport.update({
+    id: '/application/$applicationId',
+    path: '/application/$applicationId',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+
+const AuthenticatedAppUniversityUniversityIdIndexRoute =
+  AuthenticatedAppUniversityUniversityIdIndexImport.update({
+    id: '/university/$universityId/',
+    path: '/university/$universityId/',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+
+const AuthenticatedAppUniversityUniversityIdApplyIndexRoute =
+  AuthenticatedAppUniversityUniversityIdApplyIndexImport.update({
+    id: '/university/$universityId/apply/',
+    path: '/university/$universityId/apply/',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -32,39 +175,357 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/_auth/auth': {
+      id: '/_auth/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthAuthRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authenticated/_app': {
+      id: '/_authenticated/_app'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedAppRouteImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_auth/auth/': {
+      id: '/_auth/auth/'
+      path: '/'
+      fullPath: '/auth/'
+      preLoaderRoute: typeof AuthAuthIndexImport
+      parentRoute: typeof AuthAuthRouteImport
+    }
+    '/_authenticated/onboarding/': {
+      id: '/_authenticated/onboarding/'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingIndexImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
+    '/_authenticated/_app/application/$applicationId': {
+      id: '/_authenticated/_app/application/$applicationId'
+      path: '/application/$applicationId'
+      fullPath: '/application/$applicationId'
+      preLoaderRoute: typeof AuthenticatedAppApplicationApplicationIdImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/_app/events/$eventId': {
+      id: '/_authenticated/_app/events/$eventId'
+      path: '/events/$eventId'
+      fullPath: '/events/$eventId'
+      preLoaderRoute: typeof AuthenticatedAppEventsEventIdImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_auth/auth/login-email/': {
+      id: '/_auth/auth/login-email/'
+      path: '/login-email'
+      fullPath: '/auth/login-email'
+      preLoaderRoute: typeof AuthAuthLoginEmailIndexImport
+      parentRoute: typeof AuthAuthRouteImport
+    }
+    '/_auth/auth/login/': {
+      id: '/_auth/auth/login/'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthAuthLoginIndexImport
+      parentRoute: typeof AuthAuthRouteImport
+    }
+    '/_auth/auth/signup/': {
+      id: '/_auth/auth/signup/'
+      path: '/signup'
+      fullPath: '/auth/signup'
+      preLoaderRoute: typeof AuthAuthSignupIndexImport
+      parentRoute: typeof AuthAuthRouteImport
+    }
+    '/_authenticated/_app/application/': {
+      id: '/_authenticated/_app/application/'
+      path: '/application'
+      fullPath: '/application'
+      preLoaderRoute: typeof AuthenticatedAppApplicationIndexImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/_app/college-finder/': {
+      id: '/_authenticated/_app/college-finder/'
+      path: '/college-finder'
+      fullPath: '/college-finder'
+      preLoaderRoute: typeof AuthenticatedAppCollegeFinderIndexImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/_app/dashboard/': {
+      id: '/_authenticated/_app/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedAppDashboardIndexImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/_app/events/': {
+      id: '/_authenticated/_app/events/'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof AuthenticatedAppEventsIndexImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/_app/notification/': {
+      id: '/_authenticated/_app/notification/'
+      path: '/notification'
+      fullPath: '/notification'
+      preLoaderRoute: typeof AuthenticatedAppNotificationIndexImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/_app/settings/': {
+      id: '/_authenticated/_app/settings/'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedAppSettingsIndexImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/_app/university/': {
+      id: '/_authenticated/_app/university/'
+      path: '/university'
+      fullPath: '/university'
+      preLoaderRoute: typeof AuthenticatedAppUniversityIndexImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/_app/university/$universityId/': {
+      id: '/_authenticated/_app/university/$universityId/'
+      path: '/university/$universityId'
+      fullPath: '/university/$universityId'
+      preLoaderRoute: typeof AuthenticatedAppUniversityUniversityIdIndexImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/_app/university/$universityId/apply/': {
+      id: '/_authenticated/_app/university/$universityId/apply/'
+      path: '/university/$universityId/apply'
+      fullPath: '/university/$universityId/apply'
+      preLoaderRoute: typeof AuthenticatedAppUniversityUniversityIdApplyIndexImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface AuthenticatedAppRouteRouteChildren {
+  AuthenticatedAppApplicationApplicationIdRoute: typeof AuthenticatedAppApplicationApplicationIdRoute
+  AuthenticatedAppEventsEventIdRoute: typeof AuthenticatedAppEventsEventIdRoute
+  AuthenticatedAppApplicationIndexRoute: typeof AuthenticatedAppApplicationIndexRoute
+  AuthenticatedAppCollegeFinderIndexRoute: typeof AuthenticatedAppCollegeFinderIndexRoute
+  AuthenticatedAppDashboardIndexRoute: typeof AuthenticatedAppDashboardIndexRoute
+  AuthenticatedAppEventsIndexRoute: typeof AuthenticatedAppEventsIndexRoute
+  AuthenticatedAppNotificationIndexRoute: typeof AuthenticatedAppNotificationIndexRoute
+  AuthenticatedAppSettingsIndexRoute: typeof AuthenticatedAppSettingsIndexRoute
+  AuthenticatedAppUniversityIndexRoute: typeof AuthenticatedAppUniversityIndexRoute
+  AuthenticatedAppUniversityUniversityIdIndexRoute: typeof AuthenticatedAppUniversityUniversityIdIndexRoute
+  AuthenticatedAppUniversityUniversityIdApplyIndexRoute: typeof AuthenticatedAppUniversityUniversityIdApplyIndexRoute
+}
+
+const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
+  AuthenticatedAppApplicationApplicationIdRoute:
+    AuthenticatedAppApplicationApplicationIdRoute,
+  AuthenticatedAppEventsEventIdRoute: AuthenticatedAppEventsEventIdRoute,
+  AuthenticatedAppApplicationIndexRoute: AuthenticatedAppApplicationIndexRoute,
+  AuthenticatedAppCollegeFinderIndexRoute:
+    AuthenticatedAppCollegeFinderIndexRoute,
+  AuthenticatedAppDashboardIndexRoute: AuthenticatedAppDashboardIndexRoute,
+  AuthenticatedAppEventsIndexRoute: AuthenticatedAppEventsIndexRoute,
+  AuthenticatedAppNotificationIndexRoute:
+    AuthenticatedAppNotificationIndexRoute,
+  AuthenticatedAppSettingsIndexRoute: AuthenticatedAppSettingsIndexRoute,
+  AuthenticatedAppUniversityIndexRoute: AuthenticatedAppUniversityIndexRoute,
+  AuthenticatedAppUniversityUniversityIdIndexRoute:
+    AuthenticatedAppUniversityUniversityIdIndexRoute,
+  AuthenticatedAppUniversityUniversityIdApplyIndexRoute:
+    AuthenticatedAppUniversityUniversityIdApplyIndexRoute,
+}
+
+const AuthenticatedAppRouteRouteWithChildren =
+  AuthenticatedAppRouteRoute._addFileChildren(
+    AuthenticatedAppRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAppRouteRoute: typeof AuthenticatedAppRouteRouteWithChildren
+  AuthenticatedOnboardingIndexRoute: typeof AuthenticatedOnboardingIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAppRouteRoute: AuthenticatedAppRouteRouteWithChildren,
+  AuthenticatedOnboardingIndexRoute: AuthenticatedOnboardingIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
+interface AuthAuthRouteRouteChildren {
+  AuthAuthIndexRoute: typeof AuthAuthIndexRoute
+  AuthAuthLoginEmailIndexRoute: typeof AuthAuthLoginEmailIndexRoute
+  AuthAuthLoginIndexRoute: typeof AuthAuthLoginIndexRoute
+  AuthAuthSignupIndexRoute: typeof AuthAuthSignupIndexRoute
+}
+
+const AuthAuthRouteRouteChildren: AuthAuthRouteRouteChildren = {
+  AuthAuthIndexRoute: AuthAuthIndexRoute,
+  AuthAuthLoginEmailIndexRoute: AuthAuthLoginEmailIndexRoute,
+  AuthAuthLoginIndexRoute: AuthAuthLoginIndexRoute,
+  AuthAuthSignupIndexRoute: AuthAuthSignupIndexRoute,
+}
+
+const AuthAuthRouteRouteWithChildren = AuthAuthRouteRoute._addFileChildren(
+  AuthAuthRouteRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '': typeof AuthenticatedAppRouteRouteWithChildren
+  '/auth': typeof AuthAuthRouteRouteWithChildren
+  '/auth/': typeof AuthAuthIndexRoute
+  '/onboarding': typeof AuthenticatedOnboardingIndexRoute
+  '/application/$applicationId': typeof AuthenticatedAppApplicationApplicationIdRoute
+  '/events/$eventId': typeof AuthenticatedAppEventsEventIdRoute
+  '/auth/login-email': typeof AuthAuthLoginEmailIndexRoute
+  '/auth/login': typeof AuthAuthLoginIndexRoute
+  '/auth/signup': typeof AuthAuthSignupIndexRoute
+  '/application': typeof AuthenticatedAppApplicationIndexRoute
+  '/college-finder': typeof AuthenticatedAppCollegeFinderIndexRoute
+  '/dashboard': typeof AuthenticatedAppDashboardIndexRoute
+  '/events': typeof AuthenticatedAppEventsIndexRoute
+  '/notification': typeof AuthenticatedAppNotificationIndexRoute
+  '/settings': typeof AuthenticatedAppSettingsIndexRoute
+  '/university': typeof AuthenticatedAppUniversityIndexRoute
+  '/university/$universityId': typeof AuthenticatedAppUniversityUniversityIdIndexRoute
+  '/university/$universityId/apply': typeof AuthenticatedAppUniversityUniversityIdApplyIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '': typeof AuthenticatedAppRouteRouteWithChildren
+  '/auth': typeof AuthAuthIndexRoute
+  '/onboarding': typeof AuthenticatedOnboardingIndexRoute
+  '/application/$applicationId': typeof AuthenticatedAppApplicationApplicationIdRoute
+  '/events/$eventId': typeof AuthenticatedAppEventsEventIdRoute
+  '/auth/login-email': typeof AuthAuthLoginEmailIndexRoute
+  '/auth/login': typeof AuthAuthLoginIndexRoute
+  '/auth/signup': typeof AuthAuthSignupIndexRoute
+  '/application': typeof AuthenticatedAppApplicationIndexRoute
+  '/college-finder': typeof AuthenticatedAppCollegeFinderIndexRoute
+  '/dashboard': typeof AuthenticatedAppDashboardIndexRoute
+  '/events': typeof AuthenticatedAppEventsIndexRoute
+  '/notification': typeof AuthenticatedAppNotificationIndexRoute
+  '/settings': typeof AuthenticatedAppSettingsIndexRoute
+  '/university': typeof AuthenticatedAppUniversityIndexRoute
+  '/university/$universityId': typeof AuthenticatedAppUniversityUniversityIdIndexRoute
+  '/university/$universityId/apply': typeof AuthenticatedAppUniversityUniversityIdApplyIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_auth/auth': typeof AuthAuthRouteRouteWithChildren
+  '/_authenticated/_app': typeof AuthenticatedAppRouteRouteWithChildren
+  '/_auth/auth/': typeof AuthAuthIndexRoute
+  '/_authenticated/onboarding/': typeof AuthenticatedOnboardingIndexRoute
+  '/_authenticated/_app/application/$applicationId': typeof AuthenticatedAppApplicationApplicationIdRoute
+  '/_authenticated/_app/events/$eventId': typeof AuthenticatedAppEventsEventIdRoute
+  '/_auth/auth/login-email/': typeof AuthAuthLoginEmailIndexRoute
+  '/_auth/auth/login/': typeof AuthAuthLoginIndexRoute
+  '/_auth/auth/signup/': typeof AuthAuthSignupIndexRoute
+  '/_authenticated/_app/application/': typeof AuthenticatedAppApplicationIndexRoute
+  '/_authenticated/_app/college-finder/': typeof AuthenticatedAppCollegeFinderIndexRoute
+  '/_authenticated/_app/dashboard/': typeof AuthenticatedAppDashboardIndexRoute
+  '/_authenticated/_app/events/': typeof AuthenticatedAppEventsIndexRoute
+  '/_authenticated/_app/notification/': typeof AuthenticatedAppNotificationIndexRoute
+  '/_authenticated/_app/settings/': typeof AuthenticatedAppSettingsIndexRoute
+  '/_authenticated/_app/university/': typeof AuthenticatedAppUniversityIndexRoute
+  '/_authenticated/_app/university/$universityId/': typeof AuthenticatedAppUniversityUniversityIdIndexRoute
+  '/_authenticated/_app/university/$universityId/apply/': typeof AuthenticatedAppUniversityUniversityIdApplyIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | ''
+    | '/auth'
+    | '/auth/'
+    | '/onboarding'
+    | '/application/$applicationId'
+    | '/events/$eventId'
+    | '/auth/login-email'
+    | '/auth/login'
+    | '/auth/signup'
+    | '/application'
+    | '/college-finder'
+    | '/dashboard'
+    | '/events'
+    | '/notification'
+    | '/settings'
+    | '/university'
+    | '/university/$universityId'
+    | '/university/$universityId/apply'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | ''
+    | '/auth'
+    | '/onboarding'
+    | '/application/$applicationId'
+    | '/events/$eventId'
+    | '/auth/login-email'
+    | '/auth/login'
+    | '/auth/signup'
+    | '/application'
+    | '/college-finder'
+    | '/dashboard'
+    | '/events'
+    | '/notification'
+    | '/settings'
+    | '/university'
+    | '/university/$universityId'
+    | '/university/$universityId/apply'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/_auth/auth'
+    | '/_authenticated/_app'
+    | '/_auth/auth/'
+    | '/_authenticated/onboarding/'
+    | '/_authenticated/_app/application/$applicationId'
+    | '/_authenticated/_app/events/$eventId'
+    | '/_auth/auth/login-email/'
+    | '/_auth/auth/login/'
+    | '/_auth/auth/signup/'
+    | '/_authenticated/_app/application/'
+    | '/_authenticated/_app/college-finder/'
+    | '/_authenticated/_app/dashboard/'
+    | '/_authenticated/_app/events/'
+    | '/_authenticated/_app/notification/'
+    | '/_authenticated/_app/settings/'
+    | '/_authenticated/_app/university/'
+    | '/_authenticated/_app/university/$universityId/'
+    | '/_authenticated/_app/university/$universityId/apply/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthAuthRouteRoute: typeof AuthAuthRouteRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthAuthRouteRoute: AuthAuthRouteRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +538,110 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/_authenticated",
+        "/_auth/auth"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/_authenticated": {
+      "filePath": "_authenticated/route.tsx",
+      "children": [
+        "/_authenticated/_app",
+        "/_authenticated/onboarding/"
+      ]
+    },
+    "/_auth/auth": {
+      "filePath": "_auth/auth/route.tsx",
+      "children": [
+        "/_auth/auth/",
+        "/_auth/auth/login-email/",
+        "/_auth/auth/login/",
+        "/_auth/auth/signup/"
+      ]
+    },
+    "/_authenticated/_app": {
+      "filePath": "_authenticated/_app/route.tsx",
+      "parent": "/_authenticated",
+      "children": [
+        "/_authenticated/_app/application/$applicationId",
+        "/_authenticated/_app/events/$eventId",
+        "/_authenticated/_app/application/",
+        "/_authenticated/_app/college-finder/",
+        "/_authenticated/_app/dashboard/",
+        "/_authenticated/_app/events/",
+        "/_authenticated/_app/notification/",
+        "/_authenticated/_app/settings/",
+        "/_authenticated/_app/university/",
+        "/_authenticated/_app/university/$universityId/",
+        "/_authenticated/_app/university/$universityId/apply/"
+      ]
+    },
+    "/_auth/auth/": {
+      "filePath": "_auth/auth/index.tsx",
+      "parent": "/_auth/auth"
+    },
+    "/_authenticated/onboarding/": {
+      "filePath": "_authenticated/onboarding/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/_app/application/$applicationId": {
+      "filePath": "_authenticated/_app/application/$applicationId.tsx",
+      "parent": "/_authenticated/_app"
+    },
+    "/_authenticated/_app/events/$eventId": {
+      "filePath": "_authenticated/_app/events/$eventId.tsx",
+      "parent": "/_authenticated/_app"
+    },
+    "/_auth/auth/login-email/": {
+      "filePath": "_auth/auth/login-email/index.tsx",
+      "parent": "/_auth/auth"
+    },
+    "/_auth/auth/login/": {
+      "filePath": "_auth/auth/login/index.tsx",
+      "parent": "/_auth/auth"
+    },
+    "/_auth/auth/signup/": {
+      "filePath": "_auth/auth/signup/index.tsx",
+      "parent": "/_auth/auth"
+    },
+    "/_authenticated/_app/application/": {
+      "filePath": "_authenticated/_app/application/index.tsx",
+      "parent": "/_authenticated/_app"
+    },
+    "/_authenticated/_app/college-finder/": {
+      "filePath": "_authenticated/_app/college-finder/index.tsx",
+      "parent": "/_authenticated/_app"
+    },
+    "/_authenticated/_app/dashboard/": {
+      "filePath": "_authenticated/_app/dashboard/index.tsx",
+      "parent": "/_authenticated/_app"
+    },
+    "/_authenticated/_app/events/": {
+      "filePath": "_authenticated/_app/events/index.tsx",
+      "parent": "/_authenticated/_app"
+    },
+    "/_authenticated/_app/notification/": {
+      "filePath": "_authenticated/_app/notification/index.tsx",
+      "parent": "/_authenticated/_app"
+    },
+    "/_authenticated/_app/settings/": {
+      "filePath": "_authenticated/_app/settings/index.tsx",
+      "parent": "/_authenticated/_app"
+    },
+    "/_authenticated/_app/university/": {
+      "filePath": "_authenticated/_app/university/index.tsx",
+      "parent": "/_authenticated/_app"
+    },
+    "/_authenticated/_app/university/$universityId/": {
+      "filePath": "_authenticated/_app/university/$universityId/index.tsx",
+      "parent": "/_authenticated/_app"
+    },
+    "/_authenticated/_app/university/$universityId/apply/": {
+      "filePath": "_authenticated/_app/university/$universityId/apply/index.tsx",
+      "parent": "/_authenticated/_app"
     }
   }
 }
